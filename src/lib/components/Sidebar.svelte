@@ -3,7 +3,9 @@
   import ThemeToggle from './ThemeToggle.svelte';
 </script>
 
-<aside class="flex bg-veryDarkGrayishBlue dark:bg-veryDarkBlue lg:flex-col lg:rounded-r-[20px]">
+<aside
+  class="flex bg-veryDarkGrayishBlue dark:bg-veryDarkBlue lg:fixed lg:top-0 lg:bottom-0 lg:max-h-screen lg:flex-col lg:rounded-r-[20px]"
+>
   <Logo />
   <ThemeToggle />
   <div class="center border-l-1 border-[#494E6E] px-8 lg:border-l-0 lg:border-t-1 lg:px-0 lg:py-6">

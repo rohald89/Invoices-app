@@ -29,18 +29,28 @@ module.exports = {
         veryDarkGrayishBlue: '#373B53',
         lavender: '#DFE3FA',
         coolGrey: '#888EB0',
+        darkGrayishBlue: '#858BB2',
         grayishBlue: '#7E88C3',
         red: '#EC5757',
         'red-light': 'rgba(255, 151, 151)',
         black: '#0C0E16',
         'earie-black': '#141625',
-        offWhite: '#F8F8F8'
+        offWhite: '#F8F8F8',
+        statusOrange: '#FF8F00',
+        statusGreen: '#33D69F'
+      },
+      boxShadow: {
+        lightInvoiceCard: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397)',
+        darkInvoiceCard: 'box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.100397);'
       },
       borderWidth: {
         1: '1px'
       },
       height: {
         18: '72px'
+      },
+      gridTemplateColumns: {
+        invoiceLineItem: '1fr 100px 100px 100px 65px'
       },
       padding: {
         18: '72px'

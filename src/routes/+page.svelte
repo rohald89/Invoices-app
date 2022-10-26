@@ -1,7 +1,13 @@
-<script>
-  import Invoices from '../components/Invoices.svelte';
-  import InvoicesHeader from '../components/InvoicesHeader.svelte';
+<script lang="ts">
+  import { invoices, loadInvoices } from '$lib/stores/InvoiceStore';
+  import Invoices from '$lib/components/Invoices.svelte';
+  import InvoicesHeader from '$lib/components/InvoicesHeader.svelte';
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    loadInvoices();
+  });
 </script>
 
-<InvoicesHeader />
-<Invoices />
+<InvoicesHeader numberOfInvoices={$invoices.length} />
+<Invoices data={invoices} />
