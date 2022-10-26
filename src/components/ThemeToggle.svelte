@@ -25,7 +25,10 @@
   }
 </script>
 
-<button on:click={toggleTheme} class="mx-6 text-grayishBlue lg:mx-auto lg:mb-7">
+<button
+  on:click={toggleTheme}
+  class="mx-6 text-grayishBlue transition hover:text-lavender lg:mx-auto lg:mb-7"
+>
   {#if darkMode}
     <Sun />
   {:else}
