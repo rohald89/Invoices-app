@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="invoice-detail mb-20 grid gap-8 rounded-lg bg-white p-6 shadow-default dark:bg-veryDarkBlue"
+  class="invoice-detail mb-20 grid gap-8 rounded-lg bg-white p-6 shadow-default dark:bg-veryDarkBlue md:mb-0"
 >
   <div class="id">
     <p class="mb-1 text-body-1 font-bold tracking-normal dark:text-white">
@@ -15,7 +15,9 @@
       {invoice.description}
     </p>
   </div>
-  <div class="sender text-body-2 font-medium tracking-normal text-grayishBlue dark:text-lavender">
+  <div
+    class="sender text-body-2 font-medium tracking-normal text-grayishBlue dark:text-lavender md:text-right"
+  >
     <p>{invoice.senderAddress.street}</p>
     <p>{invoice.senderAddress.city}</p>
     <p>{invoice.senderAddress.postCode}</p>
@@ -96,5 +98,14 @@
 
   .items {
     grid-area: items;
+  }
+
+  @media (min-width: 768px) {
+    .invoice-detail {
+      grid-template-areas:
+        'id . . sender'
+        'dates client client-email client-email'
+        'items items items items';
+    }
   }
 </style>

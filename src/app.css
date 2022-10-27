@@ -28,4 +28,31 @@ body {
   .danger {
     @apply bg-[#EC5757];
   }
+
+  @media (min-width: 768px) {
+    .lineItem-header,
+    .lineItem {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+
+    .lineItem-header__name,
+    .lineItem__name {
+    }
+
+    .lineItem-header__quantity,
+    .lineItem__quantity {
+      justify-self: center;
+    }
+
+    .lineItem-header__price,
+    .lineItem__price {
+      justify-self: end;
+    }
+
+    .lineItem-header__total,
+    .lineItem__total {
+      justify-self: end;
+    }
+  }
 }
