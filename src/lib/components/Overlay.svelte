@@ -1,3 +1,8 @@
+<script lang="ts">
+  import { fade } from 'svelte/transition';
+  export let zIndex: string;
+</script>
+
 <svelte:head>
   <style lang="postcss">
     body {
@@ -6,4 +11,4 @@
   </style>
 </svelte:head>
 
-<div class="fixed inset-0 z-overlay bg-black opacity-50" />
+<div transition:fade={{ duration: 300 }} class={`${zIndex} fixed inset-0 bg-black opacity-50`} />

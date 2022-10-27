@@ -62,8 +62,10 @@ module.exports = {
       },
       zIndex: {
         modal: 999,
-        overlay: 998,
-        aside: 400,
+        modalOverlay: 998,
+        sidebar: 400,
+        slidePanel: 300,
+        slidePanelOverlay: 299,
         logo: 12,
         logoBg: 11
       }
