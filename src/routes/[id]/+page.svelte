@@ -20,5 +20,5 @@
 
 <div class="mt-8 flex flex-col gap-4 ">
   <DetailHeader status={data.status} id={data.id} />
-  <InvoiceDetails />
+  <InvoiceDetails invoice={data} />
 </div>

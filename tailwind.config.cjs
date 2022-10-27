@@ -12,12 +12,14 @@ module.exports = {
       xl: ['1.25rem', '1.375rem'], // 20px / 22px
       '2xl': ['2rem', '2.5rem'], // 32px / 36px
       'body-1': ['0.75rem', '0.9375rem'], // 12px / 15px
-      'body-2': ['0.6875rem', '1.125rem'] // 11px / 18px
+      'body-2': ['0.6875rem', '1.125rem'], // 11px / 18px
+      'body-3': ['0.9375rem', '1.25rem'] // 15px / 20px
     },
     letterSpacing: {
       tightest: '-0.0625rem', // -1px
       tighter: '-0.05rem', // -0.8px
       tight: '-0.0395rem', // -0.6px
+      medium: '-0.02', // -0.3125px
       normal: '-0.0165rem' // -0.25px
     },
     extend: {

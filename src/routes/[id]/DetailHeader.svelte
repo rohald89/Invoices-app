@@ -18,7 +18,13 @@
     class="fixed bottom-0 left-0 right-0 flex justify-center gap-2 bg-white py-5 px-6
     dark:bg-veryDarkBlue md:static md:ml-auto md:p-0"
   >
-    <Button label="Edit" style="secondary" onClick={() => {}} />
+    <Button
+      label="Edit"
+      style="secondary"
+      onClick={() => {
+        console.log(id);
+      }}
+    />
     <Button label="Delete" style="danger" onClick={() => {}} />
     <Button label="Mark as Paid" onClick={() => {}} />
   </div>
