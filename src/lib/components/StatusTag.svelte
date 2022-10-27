@@ -1,5 +1,8 @@
 <script lang="ts">
-  export let label: 'draft' | 'pending' | 'paid';
+  import type { InvoiceStatus } from 'src/enums';
+
+  export let label: InvoiceStatus;
+  console.log(label);
 </script>
 
 <div
@@ -13,9 +16,6 @@
 </div>
 
 <style lang="postcss">
-  .draft {
-    @apply bg-veryDarkGrayishBlue bg-opacity-[6%] text-veryDarkGrayishBlue dark:bg-lavender dark:text-lavender;
-  }
   .draft .dot {
     @apply bg-veryDarkGrayishBlue dark:bg-lavender;
   }

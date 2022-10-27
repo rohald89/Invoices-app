@@ -1,29 +1,33 @@
 <script lang="ts">
+  import { formatDate } from '$lib/utils/dateHelpers';
+  import { centsToDollars } from '$lib/utils/amountHelpers';
   import StatusTag from './StatusTag.svelte';
+  import ArrowRight from './icons/ArrowRight.svelte';
 
   export let invoice: Invoice;
-  console.log(invoice);
 </script>
 
-<div
-  class="invoice-card dark:shadow-darkInvoiceCard grid grid-cols-2 rounded-lg bg-white p-6 text-body-1 font-medium tracking-normal text-black shadow-lightInvoiceCard dark:bg-veryDarkBlue dark:text-white md:gap-6"
+<a
+  href={invoice.id}
+  class="invoice-card grid grid-cols-2 rounded-lg border-1 border-transparent bg-white p-6 text-body-1 font-medium tracking-normal text-black shadow-default transition hover:border-violet dark:bg-veryDarkBlue dark:text-white md:gap-5"
 >
   <div class="invoice-id mb-6 font-bold md:mb-0">
     <span class="text-grayishBlue dark:text-coolGrey">#</span>{invoice.id}
   </div>
-  <div class="invoice-due mb-2 text-grayishBlue dark:text-lavender md:mb-0">
-    <span>Due</span>{invoice.paymentDue}
+  <div class="invoice-due mb-2 tracking-tight text-grayishBlue dark:text-lavender md:mb-0">
+    <span class="mr-1">Due</span>{formatDate(invoice.paymentDue)}
   </div>
   <div class="invoice-client justify-self-end text-darkGrayishBlue md:justify-self-start">
     {invoice.clientName}
   </div>
   <div class="invoice-total text-lg font-bold tracking-tighter md:justify-self-end">
-    ${invoice.total}
+    {centsToDollars(invoice.total)}
   </div>
-  <div class="invoice-status justify-self-end md:justify-self-auto">
+  <div class="invoice-status justify-self-end md:justify-self-end">
     <StatusTag label={invoice.status} />
   </div>
-</div>
+  <ArrowRight />
+</a>
 
 <style lang="postcss">
   .invoice-card {
@@ -51,7 +55,7 @@
   @media (min-width: 768px) {
     .invoice-card {
       grid-template-areas: 'id due client total status';
-      grid-template-columns: 3fr 4fr 4fr 4fr 4fr;
+      grid-template-columns: 3fr 4fr 4fr 4fr 4fr 10px;
     }
 
     .invoice-card > div {

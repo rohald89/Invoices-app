@@ -9,15 +9,22 @@
   <div class="mr-auto space-y-1 md:space-y-2">
     <h1 class="text-xl font-bold tracking-tight md:text-2xl md:tracking-tightest">Invoices</h1>
     <!-- TODO START -->
-    <!-- Clean up for different screensizes -->
-    <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
-      {numberOfInvoices} invoices
-    </p>
-    <p
-      class="hidden text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:block"
-    >
-      There are {numberOfInvoices} total invoices
-    </p>
+
+    {#if numberOfInvoices === 0}
+      <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
+        No invoices
+      </p>
+    {:else}
+      <!-- Clean up for different screensizes -->
+      <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
+        {numberOfInvoices} invoices
+      </p>
+      <p
+        class="hidden text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:block"
+      >
+        There are {numberOfInvoices} total invoices
+      </p>
+    {/if}
     <!-- TODO END -->
   </div>
   <div class="flex items-center gap-3 text-body-1 font-bold tracking-normal">

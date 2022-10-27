@@ -12,4 +12,20 @@ body {
   .center {
     @apply flex items-center justify-center;
   }
+
+  .draft {
+    @apply bg-veryDarkGrayishBlue bg-opacity-[6%] text-veryDarkGrayishBlue dark:bg-lavender dark:bg-opacity-[6%] dark:text-lavender;
+  }
+
+  /* Button Styles */
+  .primary {
+    @apply bg-violet;
+  }
+
+  .secondary {
+    @apply bg-[#F9FAFE] text-grayishBlue dark:bg-[#252945] dark:text-lavender;
+  }
+  .danger {
+    @apply bg-[#EC5757];
+  }
 }

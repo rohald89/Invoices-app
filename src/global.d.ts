@@ -6,7 +6,7 @@ interface Invoice {
   paymentTerms: number;
   clientName: string;
   clientEmail: string;
-  status: string;
+  status: InvoiceStatus;
   senderAddress: Address;
   clientAddress: Address;
   items: LineItem[];

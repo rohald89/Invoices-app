@@ -40,8 +40,7 @@ module.exports = {
         statusGreen: '#33D69F'
       },
       boxShadow: {
-        lightInvoiceCard: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397)',
-        darkInvoiceCard: 'box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.100397);'
+        default: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397)'
       },
       borderWidth: {
         1: '1px'
