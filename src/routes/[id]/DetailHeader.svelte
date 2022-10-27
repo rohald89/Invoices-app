@@ -1,10 +1,17 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
+  import Modal from '$lib/components/Modal.svelte';
   import StatusTag from '$lib/components/StatusTag.svelte';
   import type { InvoiceStatus } from 'src/enums';
   //   export let status: 'paid' | 'pending' | 'draft';
   export let status: InvoiceStatus;
+  let isModalShowing = false;
   export let id = '';
+
+  const handleDelete = () => {
+    console.log('delete');
+    isModalShowing = true;
+  };
 </script>
 
 <header
@@ -25,7 +32,16 @@
         console.log(id);
       }}
     />
-    <Button label="Delete" style="danger" onClick={() => {}} />
+    <Button label="Delete" style="danger" onClick={handleDelete} />
     <Button label="Mark as Paid" onClick={() => {}} />
   </div>
 </header>
+
+<Modal isVisible={isModalShowing} on:close={() => (isModalShowing = false)}>
+  <h1 class="text-2xl font-bold">Confirm Deletion</h1>
+  <p>Are you sure you want to delete invoice #{id}? This action cannot be undone.</p>
+  <div>
+    <Button label="Cancel" onClick={() => {}} style="secondary" />
+    <Button label="Delete" onClick={() => {}} style="danger" />
+  </div>
+</Modal>

@@ -10,7 +10,8 @@ module.exports = {
       sm: ['.75rem', '0.9375rem'], // 12px / 15px
       lg: ['1rem', '1.5rem'], // 16px / 24px
       xl: ['1.25rem', '1.375rem'], // 20px / 22px
-      '2xl': ['2rem', '2.5rem'], // 32px / 36px
+      '2xl': ['1.5rem', '2rem'], // 24px / 32px
+      '3xl': ['2rem', '2.5rem'], // 32px / 36px
       'body-1': ['0.75rem', '0.9375rem'], // 12px / 15px
       'body-2': ['0.6875rem', '1.125rem'], // 11px / 18px
       'body-3': ['0.9375rem', '1.25rem'] // 15px / 20px
