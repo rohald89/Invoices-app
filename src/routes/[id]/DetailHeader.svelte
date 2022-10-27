@@ -33,15 +33,27 @@
       }}
     />
     <Button label="Delete" style="danger" onClick={handleDelete} />
-    <Button label="Mark as Paid" onClick={() => {}} />
+    {#if status === 'draft'}
+      <Button label="Send Invoice" onClick={() => {}} />
+    {:else if status === 'pending'}
+      <Button label="Mark as Paid" onClick={() => {}} />
+    {/if}
   </div>
 </header>
 
 <Modal isVisible={isModalShowing} on:close={() => (isModalShowing = false)}>
-  <h1 class="text-2xl font-bold">Confirm Deletion</h1>
-  <p>Are you sure you want to delete invoice #{id}? This action cannot be undone.</p>
-  <div>
-    <Button label="Cancel" onClick={() => {}} style="secondary" />
+  <h1 class="text-xl font-bold dark:text-white">Confirm Deletion</h1>
+  <p class="mb-6 mt-2 text-body-1 font-medium leading-5 tracking-normal text-coolGrey">
+    Are you sure you want to delete invoice #{id}? This action cannot be undone.
+  </p>
+  <div class="flex justify-end gap-2">
+    <Button
+      label="Cancel"
+      onClick={() => {
+        isModalShowing = false;
+      }}
+      style="secondary"
+    />
     <Button label="Delete" onClick={() => {}} style="danger" />
   </div>
 </Modal>

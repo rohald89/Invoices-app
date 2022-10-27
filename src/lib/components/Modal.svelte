@@ -19,14 +19,10 @@
 {#if isVisible}
   <Portal>
     <Overlay />
-    <div class="center fixed inset-0 z-modal">
-      <div class="relative min-h-[230px] w-full max-w-[480px] rounded-lg bg-white px-10 py-7">
-        <button
-          on:click={() => dispatch('close')}
-          class="hover: text-pastelPurple hover:text-daisyBush absolute right-4 top-4"
-        >
-          <h1>Close</h1>
-        </button>
+    <div class="center fixed inset-0 z-modal p-6">
+      <div
+        class="relative w-full max-w-lg rounded-lg bg-white px-8 py-8 dark:bg-veryDarkBlue md:p-12"
+      >
         <slot />
       </div>
     </div>

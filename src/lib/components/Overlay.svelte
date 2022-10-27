@@ -6,4 +6,4 @@
   </style>
 </svelte:head>
 
-<div class="fixed inset-0 z-overlay bg-black opacity-60" />
+<div class="fixed inset-0 z-overlay bg-black opacity-50" />
