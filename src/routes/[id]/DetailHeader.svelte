@@ -1,11 +1,13 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import SlidePanel from '$lib/components/SlidePanel.svelte';
   import StatusTag from '$lib/components/StatusTag.svelte';
   import type { InvoiceStatus } from 'src/enums';
-  //   export let status: 'paid' | 'pending' | 'draft';
+
   export let status: InvoiceStatus;
-  let isModalShowing = false;
+  let isModalShowing: boolean = false;
+  let isEditPanelShowing: boolean = false;
   export let id = '';
 
   const handleDelete = () => {
@@ -29,7 +31,7 @@
       label="Edit"
       style="secondary"
       onClick={() => {
-        console.log(id);
+        isEditPanelShowing = true;
       }}
     />
     <Button label="Delete" style="danger" onClick={handleDelete} />
@@ -57,3 +59,9 @@
     <Button label="Delete" onClick={() => {}} style="danger" />
   </div>
 </Modal>
+
+{#if isEditPanelShowing}
+  <SlidePanel isVisible={isEditPanelShowing} on:closePanel={() => (isEditPanelShowing = false)}>
+    <h1 class="text-xl font-bold dark:text-white">Edit Invoice</h1>
+  </SlidePanel>
+{/if}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   export let zIndex: string;
+  export let onOverlayClick: () => void;
 </script>
 
 <svelte:head>
@@ -11,4 +12,13 @@
   </style>
 </svelte:head>
 
-<div transition:fade={{ duration: 300 }} class={`${zIndex} fixed inset-0 bg-black opacity-50`} />
+<div
+  on:click={onOverlayClick}
+  on:keydown={(event) => {
+    if (event.key === 'Escape') {
+      onOverlayClick();
+    }
+  }}
+  transition:fade={{ duration: 300 }}
+  class={`${zIndex} fixed inset-0 bg-black opacity-50`}
+/>

@@ -53,13 +53,15 @@
   >
     <button
       on:click={() => (isSidePanelShowing = false)}
-      class="flex items-center gap-6 text-body-1 font-bold tracking-normal text-black dark:text-white"
+      class="flex items-center gap-6 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
     >
       <ArrowLeft />
       Go Back</button
     >
 
-    <h1 class="my-6 text-2xl font-bold tracking-tight text-black dark:text-white">New Invoice</h1>
+    <h1 class="my-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0">
+      New Invoice
+    </h1>
     <form action="">
       <fieldset class="sender grid gap-6">
         <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
