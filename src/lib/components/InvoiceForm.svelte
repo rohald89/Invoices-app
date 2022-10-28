@@ -1,69 +1,189 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from 'uuid';
+  import { addInvoice, updateInvoice } from '$lib/stores/InvoiceStore';
   import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
   import { generateId } from '$lib/utils/invoiceHelpers';
+  import { createEventDispatcher } from 'svelte';
+  import Button from './Button.svelte';
+  import Delete from './icons/Delete.svelte';
+  import { enhance } from '$app/forms';
 
-  const handleSubmit = (event: Event) => {
-    event.preventDefault();
+  const dispatch = createEventDispatcher();
 
-    const formData = new FormData(event.target as HTMLFormElement);
-    const data = Object.fromEntries(formData.entries());
+  const isExistingInvoice = (invoice: Invoice) => {
+    return invoice.id !== '';
+  };
+  export let invoice: Invoice = {
+    id: '',
+    createdAt: formatDateForInput(new Date()),
+    paymentDue: '',
+    description: '',
+    paymentTerms: 1,
+    clientName: '',
+    clientEmail: '',
+    status: 'draft',
+    senderAddress: {
+      street: '',
+      city: '',
+      postCode: '',
+      country: ''
+    },
+    clientAddress: {
+      street: '',
+      city: '',
+      postCode: '',
+      country: ''
+    },
+    items: [
+      {
+        id: '',
+        name: '',
+        quantity: 1,
+        price: 0,
+        total: 0
+      }
+    ],
+    total: 0
+  };
 
-    console.log(data);
-    const invoice = {
-      id: generateId(),
-      createdAt: formatDateForInput(new Date()),
-      paymentDue: calculateDueDate(new Date(), +data.terms),
-      description: data.desc,
-      paymentTerms: +data.terms,
-      clientName: data.name,
-      clientEmail: data.email,
-      status: 'draft',
-      senderAddress: {
-        street: data['sender-street'],
-        city: data['sender-city'],
-        postCode: data['sender-postcode'],
-        country: data['sender-country']
-      },
-      clientAddress: {
-        street: data.street,
-        city: data.city,
-        postCode: data.postCode,
-        country: data.country
-      },
-      items: [
-        {
-          name: data.itemName,
-          quantity: data.quantity,
-          price: data.price,
-          total: data.total
-        }
-      ],
-      total: data.total
-      //   total: this.items.reduce((acc, item) => acc + item.total, 0)
-    };
-    console.log(invoice);
+  const newLineItem = {
+    name: '',
+    quantity: 1,
+    price: 1000,
+    total: 1000
+  };
+
+  const addLineItem = () => {
+    invoice.items = [
+      ...invoice.items,
+      {
+        ...newLineItem,
+        id: uuidv4()
+      }
+    ];
+  };
+
+  const updateLineItem = (id, key, value) => {
+    invoice.items = invoice.items.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          [key]: value
+        };
+      }
+      return item;
+    });
+  };
+
+  const deleteLineItem = (id: string) => {
+    invoice.items = invoice.items.filter((item) => item.id !== id);
+  };
+
+  const sendInvoice = () => {
+    invoice.id = generateId();
+    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
+    invoice.paymentTerms = +invoice.paymentTerms;
+    invoice.items = invoice.items.map((item) => {
+      return {
+        ...item,
+        quantity: +item.quantity,
+        price: +item.price,
+        total: +item.quantity * +item.price
+      };
+    });
+    invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
+    invoice.status = 'pending';
+    addInvoice(invoice);
+    dispatch('closePanel');
+  };
+
+  const saveDraft = () => {
+    invoice.id = generateId();
+    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
+    invoice.paymentTerms = +invoice.paymentTerms;
+    invoice.items = invoice.items.map((item) => {
+      return {
+        ...item,
+        quantity: +item.quantity,
+        price: +item.price,
+        total: +item.quantity * +item.price
+      };
+    });
+    invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
+    invoice.status = 'draft';
+    addInvoice(invoice);
+    dispatch('closePanel');
+  };
+
+  const handleUpdate = () => {
+    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
+    invoice.paymentTerms = +invoice.paymentTerms;
+    invoice.items = invoice.items.map((item) => {
+      return {
+        ...item,
+        quantity: +item.quantity,
+        price: +item.price,
+        total: +item.quantity * +item.price
+      };
+    });
+    invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
+    updateInvoice(invoice);
+    dispatch('closePanel');
   };
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
+<form
+  class="relative px-6 md:px-14 lg:pl-40"
+  method="POST"
+  action="?/create"
+  use:enhance={({ form }) => {
+    return async ({ result, update }) => {
+      console.log('result', result);
+      form.reset();
+      update();
+    };
+  }}
+>
   <fieldset class="sender grid gap-6">
     <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
       >Bill From</legend
     >
     <div class="inputField inputField__sender-street">
       <label for="sender-street">Street Address</label>
-      <input type="text" name="sender-street" id="sender-street" />
+      <input
+        on:change={(e) => (invoice.senderAddress.street = e.target.value)}
+        type="text"
+        name="sender-street"
+        id="sender-street"
+        value={invoice.senderAddress.street}
+      />
     </div>
     <div class="inputField inputField__sender-city">
       <label for="sender-city">City</label>
-      <input type="text" name="sender-city" id="sender-city" />
+      <input
+        value={invoice.senderAddress.city}
+        on:change={(e) => (invoice.senderAddress.city = e.target.value)}
+        type="text"
+        name="sender-city"
+        id="sender-city"
+      />
     </div>
     <div class="inputField inputField__sender-postcode">
       <label for="sender-postcode">Post Code</label>
-      <input type="text" name="sender-postcode" id="sender-postcode" />
+      <input
+        value={invoice.senderAddress.postCode}
+        on:change={(e) => (invoice.senderAddress.postCode = e.target.value)}
+        type="text"
+        name="sender-postcode"
+        id="sender-postcode"
+      />
     </div>
     <div class="inputField inputField__sender-country">
-      <label for="sender-country">Country</label>
+      <label
+        value={invoice.senderAddress.country}
+        on:change={(e) => (invoice.senderAddress.country = e.target.value)}
+        for="sender-country">Country</label
+      >
       <input type="text" name="sender-country" id="sender-country" />
     </div>
   </fieldset>
@@ -73,54 +193,174 @@
     >
     <div class="inputField inputField__name">
       <label for="name">Client's Name</label>
-      <input type="text" name="name" id="name" />
+      <input
+        value={invoice.clientName}
+        on:change={(e) => (invoice.clientName = e.target.value)}
+        type="text"
+        name="name"
+        id="name"
+      />
     </div>
     <div class="inputField inputField__email">
       <label for="email">Client's Email</label>
-      <input type="text" name="email" id="email" />
+      <input
+        value={invoice.clientEmail}
+        on:change={(e) => (invoice.clientEmail = e.target.value)}
+        type="text"
+        name="email"
+        id="email"
+      />
     </div>
     <div class="inputField inputField__street">
       <label for="street">Street Address</label>
-      <input type="text" name="street" id="street" />
+      <input
+        value={invoice.clientAddress.street}
+        on:change={(e) => (invoice.clientAddress.street = e.target.value)}
+        type="text"
+        name="street"
+        id="street"
+      />
     </div>
     <div class="inputField inputField__city">
       <label for="city">City</label>
-      <input type="text" name="city" id="city" />
+      <input
+        value={invoice.clientAddress.city}
+        on:change={(e) => (invoice.clientAddress.city = e.target.value)}
+        type="text"
+        name="city"
+        id="city"
+      />
     </div>
     <div class="inputField inputField__postcode">
       <label for="postcode">Post Code</label>
-      <input type="text" name="postcode" id="postcode" />
+      <input
+        value={invoice.clientAddress.postCode}
+        on:change={(e) => (invoice.clientAddress.postCode = e.target.value)}
+        type="text"
+        name="postcode"
+        id="postcode"
+      />
     </div>
     <div class="inputField inputField__country">
       <label for="country">Country</label>
-      <input type="text" name="country" id="country" />
+      <input
+        value={invoice.clientAddress.country}
+        on:change={(e) => (invoice.clientAddress.country = e.target.value)}
+        type="text"
+        name="country"
+        id="country"
+      />
     </div>
   </fieldset>
   <fieldset class="payment mt-12 grid gap-6">
     <div class="inputField inputField__date">
+      <!-- TODO create custom date component for improved styling -->
       <label for="date">Invoice Date</label>
-      <input type="date" name="date" id="date" />
+      <input
+        value={invoice.createdAt}
+        on:change={(e) => (invoice.createdAt = e.target.value)}
+        type="date"
+        name="date"
+        id="date"
+      />
     </div>
     <div class="inputField inputField__terms">
+      <!-- TODO create custom select for improved styling -->
       <label for="terms">Payment Terms</label>
       <!-- <input type="text" name="terms" id="terms" /> -->
-      <select name="terms" id="terms">
-        <option value="1">Net 1 Day</option>
-        <option value="7">Net 7 Days</option>
-        <option value="14">Net 14 Days</option>
-        <option value="30">Net 30 Days</option>
+      <select name="terms" id="terms" on:change={(e) => (invoice.paymentTerms = e.target.value)}>
+        <option value="1" selected={invoice.paymentTerms === 1}>Net 1 Day</option>
+        <option value="7" selected={invoice.paymentTerms === 7}>Net 7 Days</option>
+        <option value="14" selected={invoice.paymentTerms === 14}>Net 14 Days</option>
+        <option value="30" selected={invoice.paymentTerms === 30}>Net 30 Days</option>
       </select>
     </div>
     <div class="inputField inputField__description">
       <label for="desc">Project Description</label>
-      <input type="text" name="desc" id="desc" />
+      <input
+        value={invoice.description}
+        on:change={(e) => (invoice.description = e.target.value)}
+        type="text"
+        name="desc"
+        id="desc"
+      />
     </div>
   </fieldset>
-  <button
-    type="submit"
-    class="mt-12 rounded-lg bg-violet py-4 px-8 text-body-1 font-bold tracking-normal text-offWhite"
-    >Save</button
+  <fieldset class="itemList mt-12 pb-28 text-black dark:text-white">
+    <legend>Item List</legend>
+    <div class="itemList__grid hidden grid-cols-5 gap-4 md:grid">
+      <div class="itemList__header__name">Item Name</div>
+      <div class="itemList__header__quantity">Qty.</div>
+      <div class="itemList__header__price">Price</div>
+      <div class="itemList__header__total">Total</div>
+      <div />
+    </div>
+    {#each invoice.items as lineItem}
+      <div class="itemList__grid itemList__grid-item mt-12 grid grid-cols-5 gap-4 md:mt-4">
+        <div class="itemList__item__name inputField">
+          <label for={`item-name-${lineItem.id}`} class="md:hidden">Item Name</label>
+          <input
+            type="text"
+            name={`item-name-${lineItem.id}`}
+            value={lineItem.name}
+            on:input={(e) => updateLineItem(lineItem.id, 'name', e.target.value)}
+          />
+        </div>
+        <div class="itemList__item__quantity inputField">
+          <label for={`item-quantity-${lineItem.id}`} class="md:hidden">Qty.</label>
+          <input
+            type="text"
+            name={`item-quantity-${lineItem.id}`}
+            value={lineItem.quantity}
+            on:input={(e) => updateLineItem(lineItem.id, 'quantity', e.target.value)}
+          />
+        </div>
+        <div class="itemList__item__price inputField">
+          <label for={`item-price-${lineItem.id}`} class="md:hidden">Price</label>
+          <input
+            type="text"
+            name={`item-price-${lineItem.id}`}
+            value={lineItem.price}
+            on:input={(e) => updateLineItem(lineItem.id, 'price', e.target.value)}
+          />
+        </div>
+        <div class="itemList__item__total inputField">
+          <label for={`item-total-${lineItem.id}`} class="md:hidden">Total</label>
+          <input disabled value={((lineItem.quantity * lineItem.price) / 100).toFixed(2)} />
+        </div>
+        <button
+          type="button"
+          on:click={() => deleteLineItem(lineItem.id)}
+          class="itemList__item__delete text-coolGrey transition hover:text-red"
+        >
+          <Delete />
+        </button>
+      </div>
+    {/each}
+    <Button label="+ Add New Item" style="stealth" classes="w-full mt-4" onClick={addLineItem} />
+  </fieldset>
+  <div
+    class="absolute bottom-0 left-0 right-0 flex gap-2 p-5 dark:bg-veryDarkBlue md:px-14 dark:md:bg-transparent lg:pl-40 "
   >
+    {#if invoice.id === ''}
+      <Button
+        onClick={() => dispatch('closePanel')}
+        style="secondary"
+        label="Discard"
+        classes="mr-auto"
+      />
+      <Button onClick={saveDraft} style="secondary" label="Save as Draft" />
+      <Button onClick={sendInvoice} label="Save & Send" />
+    {:else}
+      <Button
+        onClick={() => dispatch('closePanel')}
+        style="secondary"
+        label="Cancel"
+        classes="ml-auto"
+      />
+      <Button type="submit" onClick={handleUpdate} label="Save Changes" />
+    {/if}
+  </div>
 </form>
 
 <style lang="postcss">
@@ -135,11 +375,12 @@
     @apply flex flex-col gap-[10px];
   }
   .inputField label {
-    @apply block text-body-1 font-medium tracking-normal text-grayishBlue dark:text-coolGrey;
+    @apply text-body-1 font-medium tracking-normal text-grayishBlue dark:text-coolGrey;
   }
 
-  .inputField input {
-    @apply box-border block w-full cursor-pointer rounded-[4px] border-1 border-lavender py-4 px-5 text-body-1 font-bold tracking-normal text-black caret-violet focus:outline-none focus:ring-1 focus:ring-violet dark:border-darkBlue dark:bg-veryDarkBlue dark:text-white;
+  .inputField input,
+  .inputField select {
+    @apply box-border block w-full cursor-pointer rounded-[4px] border-1 border-lavender py-4 pl-5 text-body-1 font-bold tracking-normal text-black caret-violet accent-violet focus:outline-none focus:ring-1 focus:ring-violet dark:border-darkBlue dark:bg-veryDarkBlue dark:text-white;
   }
 
   .inputField__sender-street {
@@ -226,6 +467,45 @@
       grid-template-areas:
         'date terms'
         'desc desc';
+    }
+  }
+
+  .itemList__grid-item {
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    grid-template-areas:
+      'name name name name'
+      'quantity price total delete';
+  }
+
+  .itemList__item__name {
+    grid-area: name;
+  }
+  .itemList__item__quantity {
+    grid-area: quantity;
+  }
+  .itemList__item__price {
+    grid-area: price;
+  }
+  .itemList__item__total {
+    grid-area: total;
+  }
+  .itemList__item__delete {
+    grid-area: delete;
+    align-self: end;
+    justify-self: center;
+    margin-bottom: 18px;
+  }
+
+  @media (min-width: 768px) {
+    .itemList__grid {
+      grid-template-columns: 4fr 1fr 2fr 2fr 1fr;
+      align-items: center;
+    }
+
+    .itemList__grid-item {
+      grid-template-columns: 4fr 1fr 2fr 2fr 1fr;
+      align-items: center;
+      grid-template-areas: 'name quantity price total delete';
     }
   }
 </style>

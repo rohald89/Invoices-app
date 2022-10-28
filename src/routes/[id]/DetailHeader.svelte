@@ -5,12 +5,13 @@
   import Modal from '$lib/components/Modal.svelte';
   import SlidePanel from '$lib/components/SlidePanel.svelte';
   import StatusTag from '$lib/components/StatusTag.svelte';
-  import { changeStatus, deleteInvoice } from '$lib/stores/InvoiceStore';
+  import { changeStatus, deleteInvoice, invoices } from '$lib/stores/InvoiceStore';
 
   export let status: InvoiceStatus;
   let isModalShowing: boolean = false;
   let isEditPanelShowing: boolean = false;
   export let id = '';
+  export let invoice: Invoice;
 
   const handleDelete = () => {
     isModalShowing = true;
@@ -77,14 +78,17 @@
   <SlidePanel isVisible={isEditPanelShowing} on:closePanel={() => (isEditPanelShowing = false)}>
     <button
       on:click={() => (isEditPanelShowing = false)}
-      class="flex items-center gap-6 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
+      class="flex items-center
+    gap-6 px-6 pt-24 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
     >
       <ArrowLeft />
       Go Back</button
     >
-    <h1 class="my-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0">
+    <h1
+      class="my-6 px-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0 md:px-14 md:pt-32 lg:pt-14 lg:pl-40"
+    >
       Edit <span class="text-coolGrey">#</span>{id}
     </h1>
-    <InvoiceForm />
+    <InvoiceForm {invoice} on:closePanel={() => (isEditPanelShowing = false)} />
   </SlidePanel>
 {/if}

@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { getInvoice } from '$lib/stores/InvoiceStore';
   import ArrowLeft from '$lib/components/icons/ArrowLeft.svelte';
   import DetailHeader from './DetailHeader.svelte';
   import InvoiceDetails from './InvoiceDetails.svelte';
 
   /** @type {import('/$types').PageData} */
   export let data: Invoice;
-  console.log(data);
+
+  //   $: invoice = getInvoice(data.id);
 </script>
 
 <div>
@@ -19,6 +21,6 @@
 </div>
 
 <div class="mt-8 flex flex-col gap-4 ">
-  <DetailHeader status={data.status} id={data.id} />
+  <DetailHeader invoice={data} status={data.status} id={data.id} />
   <InvoiceDetails invoice={data} />
 </div>

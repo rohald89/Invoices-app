@@ -7,9 +7,9 @@
 *,
 *::before,
 *::after {
-
   box-sizing: border-box;
 }
+
 body {
   @apply min-h-screen font-spartan;
 }
@@ -33,6 +33,10 @@ body {
   }
   .danger {
     @apply bg-[#EC5757];
+  }
+
+  .stealth {
+    @apply bg-[#F9FAFE] text-grayishBlue dark:bg-darkBlue dark:text-coolGrey;
   }
 
   @media (min-width: 768px) {

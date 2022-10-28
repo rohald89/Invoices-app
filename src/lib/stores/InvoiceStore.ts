@@ -10,10 +10,22 @@ export const loadInvoices = () => {
 };
 loadInvoices();
 
+export const getInvoice = (id: string) => {
+    return get(invoices).find((inv) => inv.id === id);
+};
+
 export const addInvoice = (invoice: Invoice) => {
   console.log(invoice);
   invoices.update((invoices) => {
     return [invoice, ...invoices];
+  });
+};
+
+export const updateInvoice = (invoice: Invoice) => {
+  invoices.update((invoices) => {
+    const index = invoices.findIndex((inv) => inv.id === invoice.id);
+    invoices[index] = invoice;
+    return invoices;
   });
 };
 

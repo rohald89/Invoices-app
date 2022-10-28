@@ -21,9 +21,12 @@
 
 <Portal>
   <Overlay zIndex="z-slidePanelOverlay" onOverlayClick={() => closePanel()} />
+  <!-- px-6 pt-24 md:px-14 md:pt-32 lg:pt-14 lg:pl-40 -->
   <div
     transition:fly={{ x: -500, duration: 300 }}
-    class="fixed top-0 left-0 z-slidePanel h-screen w-full overflow-y-scroll rounded-r-[20px] bg-white p-6 pt-24 dark:bg-earie-black md:w-3/4 md:p-14 md:pt-32 lg:pt-14 lg:pl-40 xl:w-1/2"
+    class="
+
+    fixed top-0 left-0 z-slidePanel h-screen w-full overflow-y-scroll bg-white dark:bg-earie-black md:w-3/4 md:rounded-r-[20px] xl:w-1/2"
   >
     <slot />
   </div>

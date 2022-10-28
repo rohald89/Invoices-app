@@ -49,19 +49,23 @@
 {#if isSidePanelShowing}
   <SlidePanel
     on:closePanel={() => {
+      console.log('close panel');
       isSidePanelShowing = false;
     }}
   >
     <button
       on:click={() => (isSidePanelShowing = false)}
-      class="flex items-center gap-6 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
+      class="flex items-center
+      gap-6 px-6 pt-24 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
     >
       <ArrowLeft />
       Go Back</button
     >
-    <h1 class="my-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0">
+    <h1
+      class="my-6 px-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0 md:px-14 md:pt-32 lg:pt-14 lg:pl-40"
+    >
       New Invoice
     </h1>
-    <InvoiceForm />
+    <InvoiceForm on:closePanel={() => (isSidePanelShowing = false)} />
   </SlidePanel>
 {/if}

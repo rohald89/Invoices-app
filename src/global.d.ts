@@ -14,6 +14,7 @@ interface Invoice {
 }
 
 interface LineItem {
+  id: string;
   name: string;
   quantity: number;
   price: number;
@@ -26,3 +27,5 @@ interface Address {
   postCode: string;
   country: string;
 }
+
+type InvoiceStatus = 'draft' | 'pending' | 'paid';
