@@ -1,9 +1,11 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
+  import ArrowLeft from '$lib/components/icons/ArrowLeft.svelte';
+  import InvoiceForm from '$lib/components/InvoiceForm.svelte';
   import Modal from '$lib/components/Modal.svelte';
   import SlidePanel from '$lib/components/SlidePanel.svelte';
   import StatusTag from '$lib/components/StatusTag.svelte';
-  import type { InvoiceStatus } from 'src/enums';
+  import { changeStatus, deleteInvoice } from '$lib/stores/InvoiceStore';
 
   export let status: InvoiceStatus;
   let isModalShowing: boolean = false;
@@ -11,7 +13,6 @@
   export let id = '';
 
   const handleDelete = () => {
-    console.log('delete');
     isModalShowing = true;
   };
 </script>
@@ -36,9 +37,21 @@
     />
     <Button label="Delete" style="danger" onClick={handleDelete} />
     {#if status === 'draft'}
-      <Button label="Send Invoice" onClick={() => {}} />
+      <Button
+        label="Send Invoice"
+        onClick={() => {
+          changeStatus(id, 'pending');
+          status = 'pending';
+        }}
+      />
     {:else if status === 'pending'}
-      <Button label="Mark as Paid" onClick={() => {}} />
+      <Button
+        label="Mark as Paid"
+        onClick={() => {
+          changeStatus(id, 'paid');
+          status = 'paid';
+        }}
+      />
     {/if}
   </div>
 </header>
@@ -56,12 +69,22 @@
       }}
       style="secondary"
     />
-    <Button label="Delete" onClick={() => {}} style="danger" />
+    <Button label="Delete" onClick={() => deleteInvoice(id)} style="danger" />
   </div>
 </Modal>
 
 {#if isEditPanelShowing}
   <SlidePanel isVisible={isEditPanelShowing} on:closePanel={() => (isEditPanelShowing = false)}>
-    <h1 class="text-xl font-bold dark:text-white">Edit Invoice</h1>
+    <button
+      on:click={() => (isEditPanelShowing = false)}
+      class="flex items-center gap-6 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
+    >
+      <ArrowLeft />
+      Go Back</button
+    >
+    <h1 class="my-6 text-2xl font-bold tracking-tight text-black dark:text-white md:mt-0">
+      Edit <span class="text-coolGrey">#</span>{id}
+    </h1>
+    <InvoiceForm />
   </SlidePanel>
 {/if}

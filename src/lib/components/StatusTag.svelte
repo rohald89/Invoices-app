@@ -1,8 +1,5 @@
 <script lang="ts">
-  import type { InvoiceStatus } from 'src/enums';
-
   export let label: InvoiceStatus;
-  console.log(label);
 </script>
 
 <div
