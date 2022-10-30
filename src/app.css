@@ -15,6 +15,21 @@ body {
 }
 
 @layer utilities {
+  .day {
+    @apply inline-flex aspect-square h-6 cursor-pointer items-center justify-center rounded-full border-1 border-transparent hover:text-violet;
+  }
+  .day.selected {
+    @apply text-violet;
+  }
+  .day.prev-month,
+  .day.next-month {
+    @apply text-grayishBlue dark:text-coolGrey;
+  }
+
+  .payment .inputField__date {
+    grid-area: date;
+  }
+
   .center {
     @apply flex items-center justify-center;
   }
@@ -25,14 +40,17 @@ body {
 
   /* Button Styles */
   .primary {
-    @apply bg-violet;
+    @apply bg-violet hover:bg-violet-light;
   }
 
   .secondary {
-    @apply bg-[#F9FAFE] text-grayishBlue dark:bg-[#252945] dark:text-lavender;
+    @apply bg-[#F9FAFE] text-grayishBlue hover:bg-lavender dark:bg-[#252945] dark:text-lavender hover:dark:bg-white hover:dark:text-grayishBlue;
+  }
+  .tertiary {
+    @apply bg-veryDarkGrayishBlue text-coolGrey dark:text-lavender;
   }
   .danger {
-    @apply bg-[#EC5757];
+    @apply bg-[#EC5757] hover:bg-[#FF9797];
   }
 
   .stealth {

@@ -43,7 +43,10 @@ module.exports = {
         statusGreen: '#33D69F'
       },
       boxShadow: {
-        default: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397)'
+        default: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397)',
+        'filter-light': '0px 10px 20px rgba(72, 84, 159, 0.25)',
+        'filter-dark': ' 0px 10px 20px rgba(0, 0, 0, 0.25)',
+        buttons: '0px 0px 15px 0px rgba(0,0,0,0.18)'
       },
       borderWidth: {
         1: '1px'
@@ -71,5 +74,5 @@ module.exports = {
       }
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')]
 };

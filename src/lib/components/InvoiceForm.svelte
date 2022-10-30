@@ -1,12 +1,13 @@
 <script lang="ts">
   import { v4 as uuidv4 } from 'uuid';
   import { addInvoice, updateInvoice } from '$lib/stores/InvoiceStore';
-  import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
+  import { calculateDueDate, formatDate, formatDateForInput } from '$lib/utils/dateHelpers';
   import { generateId } from '$lib/utils/invoiceHelpers';
   import { createEventDispatcher } from 'svelte';
   import Button from './Button.svelte';
   import Delete from './icons/Delete.svelte';
   import { enhance } from '$app/forms';
+  import DatePicker from './DatePicker.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -81,7 +82,7 @@
 
   const sendInvoice = () => {
     invoice.id = generateId();
-    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
+    invoice.paymentDue = calculateDueDate(new Date(invoice.createdAt), +invoice.paymentTerms);
     invoice.paymentTerms = +invoice.paymentTerms;
     invoice.items = invoice.items.map((item) => {
       return {
@@ -99,8 +100,8 @@
 
   const saveDraft = () => {
     invoice.id = generateId();
-    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
     invoice.paymentTerms = +invoice.paymentTerms;
+    invoice.paymentDue = calculateDueDate(new Date(invoice.createdAt), invoice.paymentTerms);
     invoice.items = invoice.items.map((item) => {
       return {
         ...item,
@@ -116,8 +117,8 @@
   };
 
   const handleUpdate = () => {
-    invoice.paymentDue = calculateDueDate(new Date(), +invoice.paymentTerms);
     invoice.paymentTerms = +invoice.paymentTerms;
+    invoice.paymentDue = calculateDueDate(new Date(invoice.createdAt), invoice.paymentTerms);
     invoice.items = invoice.items.map((item) => {
       return {
         ...item,
@@ -144,7 +145,9 @@
     };
   }}
 >
-  <div class="overflow-scroll px-6 md:px-14 lg:pl-40">
+  <div
+    class="overflow-scroll px-6 scrollbar scrollbar-track-transparent scrollbar-thumb-violet md:px-14 lg:pl-40"
+  >
     <fieldset class="sender grid gap-6">
       <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
         >Bill From</legend
@@ -254,8 +257,12 @@
       </div>
     </fieldset>
     <fieldset class="payment mt-12 grid gap-6">
-      <div class="inputField inputField__date">
-        <!-- TODO create custom date component for improved styling -->
+      <DatePicker
+        classes="inputField__date"
+        onDateChange={(date) => (invoice.createdAt = formatDateForInput(date))}
+        selectedDate={new Date(invoice.createdAt)}
+      />
+      <!-- <div class="inputField ">
         <label for="date">Invoice Date</label>
         <input
           value={invoice.createdAt}
@@ -264,7 +271,7 @@
           name="date"
           id="date"
         />
-      </div>
+      </div> -->
       <div class="inputField inputField__terms">
         <!-- TODO create custom select for improved styling -->
         <label for="terms">Payment Terms</label>
@@ -343,7 +350,7 @@
     <!-- TODO -->
   </div>
   <div
-    class="flex gap-2 py-5 px-6 dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 lg:pl-40 dark:lg:bg-transparent"
+    class="flex justify-center gap-2 py-5 px-6 shadow-buttons dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 lg:pl-40 dark:lg:bg-transparent"
   >
     {#if invoice.id === ''}
       <Button
@@ -352,7 +359,7 @@
         label="Discard"
         classes="md:mr-auto"
       />
-      <Button onClick={saveDraft} style="secondary" label="Save as Draft" />
+      <Button onClick={saveDraft} style="tertiary" label="Save as Draft" />
       <Button onClick={sendInvoice} label="Save & Send" />
     {:else}
       <Button
@@ -454,9 +461,7 @@
       'terms'
       'desc';
   }
-  .payment .inputField__date {
-    grid-area: date;
-  }
+
   .payment .inputField__terms {
     grid-area: terms;
   }

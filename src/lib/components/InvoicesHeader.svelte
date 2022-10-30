@@ -43,7 +43,7 @@
   <FilterStatus />
   <button
     on:click={() => (isSidePanelShowing = true)}
-    class="flex items-center rounded-full bg-violet p-2 pr-4 text-body-1 font-bold tracking-normal text-white"
+    class="flex items-center rounded-full bg-violet p-2 pr-4 text-body-1 font-bold tracking-normal text-white transition hover:bg-violet-light"
   >
     <div class="center mr-4 h-8 w-8 rounded-full bg-white">
       <Plus />
@@ -62,7 +62,7 @@
     <button
       on:click={() => (isSidePanelShowing = false)}
       class="flex items-center
-      gap-6 px-6 pt-24 text-body-1 font-bold tracking-normal text-black dark:text-white md:hidden"
+      gap-6 px-6 pt-24 text-body-1 font-bold tracking-normal text-black hover:text-grayishBlue dark:text-white dark:hover:text-coolGrey md:hidden"
     >
       <ArrowLeft />
       Go Back</button
