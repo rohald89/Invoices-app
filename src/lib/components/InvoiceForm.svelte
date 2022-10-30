@@ -11,9 +11,6 @@
 
   const dispatch = createEventDispatcher();
 
-  const isExistingInvoice = (invoice: Invoice) => {
-    return invoice.id !== '';
-  };
   export let invoice: Invoice = {
     id: '',
     createdAt: formatDateForInput(new Date()),
@@ -64,7 +61,7 @@
     ];
   };
 
-  const updateLineItem = (id, key, value) => {
+  const updateLineItem = (id: string, key: string, value: string) => {
     invoice.items = invoice.items.map((item) => {
       if (item.id === id) {
         return {
@@ -155,18 +152,16 @@
       <div class="inputField inputField__sender-street">
         <label for="sender-street">Street Address</label>
         <input
-          on:change={(e) => (invoice.senderAddress.street = e.target.value)}
           type="text"
           name="sender-street"
           id="sender-street"
-          value={invoice.senderAddress.street}
+          bind:value={invoice.senderAddress.street}
         />
       </div>
       <div class="inputField inputField__sender-city">
         <label for="sender-city">City</label>
         <input
-          value={invoice.senderAddress.city}
-          on:change={(e) => (invoice.senderAddress.city = e.target.value)}
+          bind:value={invoice.senderAddress.city}
           type="text"
           name="sender-city"
           id="sender-city"
@@ -175,20 +170,20 @@
       <div class="inputField inputField__sender-postcode">
         <label for="sender-postcode">Post Code</label>
         <input
-          value={invoice.senderAddress.postCode}
-          on:change={(e) => (invoice.senderAddress.postCode = e.target.value)}
+          bind:value={invoice.senderAddress.postCode}
           type="text"
           name="sender-postcode"
           id="sender-postcode"
         />
       </div>
       <div class="inputField inputField__sender-country">
-        <label
-          value={invoice.senderAddress.country}
-          on:change={(e) => (invoice.senderAddress.country = e.target.value)}
-          for="sender-country">Country</label
-        >
-        <input type="text" name="sender-country" id="sender-country" />
+        <label for="sender-country">Country</label>
+        <input
+          bind:value={invoice.senderAddress.country}
+          type="text"
+          name="sender-country"
+          id="sender-country"
+        />
       </div>
     </fieldset>
     <fieldset class="receiver mt-12 grid gap-6">
@@ -197,49 +192,24 @@
       >
       <div class="inputField inputField__name">
         <label for="name">Client's Name</label>
-        <input
-          value={invoice.clientName}
-          on:change={(e) => (invoice.clientName = e.target.value)}
-          type="text"
-          name="name"
-          id="name"
-        />
+        <input bind:value={invoice.clientName} type="text" name="name" id="name" />
       </div>
       <div class="inputField inputField__email">
         <label for="email">Client's Email</label>
-        <input
-          value={invoice.clientEmail}
-          on:change={(e) => (invoice.clientEmail = e.target.value)}
-          type="text"
-          name="email"
-          id="email"
-        />
+        <input bind:value={invoice.clientEmail} type="text" name="email" id="email" />
       </div>
       <div class="inputField inputField__street">
         <label for="street">Street Address</label>
-        <input
-          value={invoice.clientAddress.street}
-          on:change={(e) => (invoice.clientAddress.street = e.target.value)}
-          type="text"
-          name="street"
-          id="street"
-        />
+        <input bind:value={invoice.clientAddress.street} type="text" name="street" id="street" />
       </div>
       <div class="inputField inputField__city">
         <label for="city">City</label>
-        <input
-          value={invoice.clientAddress.city}
-          on:change={(e) => (invoice.clientAddress.city = e.target.value)}
-          type="text"
-          name="city"
-          id="city"
-        />
+        <input bind:value={invoice.clientAddress.city} type="text" name="city" id="city" />
       </div>
       <div class="inputField inputField__postcode">
         <label for="postcode">Post Code</label>
         <input
-          value={invoice.clientAddress.postCode}
-          on:change={(e) => (invoice.clientAddress.postCode = e.target.value)}
+          bind:value={invoice.clientAddress.postCode}
           type="text"
           name="postcode"
           id="postcode"
@@ -247,13 +217,7 @@
       </div>
       <div class="inputField inputField__country">
         <label for="country">Country</label>
-        <input
-          value={invoice.clientAddress.country}
-          on:change={(e) => (invoice.clientAddress.country = e.target.value)}
-          type="text"
-          name="country"
-          id="country"
-        />
+        <input bind:value={invoice.clientAddress.country} type="text" name="country" id="country" />
       </div>
     </fieldset>
     <fieldset class="payment mt-12 grid gap-6">
@@ -262,21 +226,11 @@
         onDateChange={(date) => (invoice.createdAt = formatDateForInput(date))}
         selectedDate={new Date(invoice.createdAt)}
       />
-      <!-- <div class="inputField ">
-        <label for="date">Invoice Date</label>
-        <input
-          value={invoice.createdAt}
-          on:change={(e) => (invoice.createdAt = e.target.value)}
-          type="date"
-          name="date"
-          id="date"
-        />
-      </div> -->
       <div class="inputField inputField__terms">
         <!-- TODO create custom select for improved styling -->
         <label for="terms">Payment Terms</label>
         <!-- <input type="text" name="terms" id="terms" /> -->
-        <select name="terms" id="terms" on:change={(e) => (invoice.paymentTerms = e.target.value)}>
+        <select name="terms" id="terms" bind:value={invoice.paymentTerms}>
           <option value="1" selected={invoice.paymentTerms === 1}>Net 1 Day</option>
           <option value="7" selected={invoice.paymentTerms === 7}>Net 7 Days</option>
           <option value="14" selected={invoice.paymentTerms === 14}>Net 14 Days</option>
@@ -285,13 +239,7 @@
       </div>
       <div class="inputField inputField__description">
         <label for="desc">Project Description</label>
-        <input
-          value={invoice.description}
-          on:change={(e) => (invoice.description = e.target.value)}
-          type="text"
-          name="desc"
-          id="desc"
-        />
+        <input bind:value={invoice.description} type="text" name="desc" id="desc" />
       </div>
     </fieldset>
     <fieldset class="itemList mt-12 pb-6 text-black dark:text-white">

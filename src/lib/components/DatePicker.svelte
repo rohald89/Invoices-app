@@ -8,7 +8,7 @@
   export let onDateChange: (date: Date) => void = () => {};
 
   const today = new Date();
-  let isOpen = true;
+  let isOpen = false;
   // abreviated month names
   const months = [
     'Jan',
