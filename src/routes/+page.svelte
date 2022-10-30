@@ -5,4 +5,4 @@
 </script>
 
 <InvoicesHeader numberOfInvoices={$invoices.length} />
-<Invoices data={$invoices} />
+<Invoices />

@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { activeStatuses, filteredInvoices } from '$lib/stores/InvoiceStore';
   import Plus from './icons/Plus.svelte';
-  import ArrowDown from './icons/ArrowDown.svelte';
-
-  export let numberOfInvoices: number;
   import SlidePanel from '$lib/components/SlidePanel.svelte';
   import ArrowLeft from './icons/ArrowLeft.svelte';
   import InvoiceForm from './InvoiceForm.svelte';
+  import FilterStatus from './FilterStatus.svelte';
   let isSidePanelShowing: boolean = false;
 </script>
 
@@ -14,27 +13,34 @@
     <h1 class="text-xl font-bold tracking-tight md:text-2xl md:tracking-tightest">Invoices</h1>
     <!-- TODO START -->
 
-    {#if numberOfInvoices === 0}
+    {#if $filteredInvoices.length === 0}
       <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
         No invoices
       </p>
-    {:else}
+    {:else if $activeStatuses.length}
       <!-- Clean up for different screensizes -->
       <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
-        {numberOfInvoices} invoices
+        {$filteredInvoices.length} invoices: {$activeStatuses.join(', ')}
       </p>
       <p
         class="hidden text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:block"
       >
-        There are {numberOfInvoices} total invoices
+        There are {$filteredInvoices.length} invoices with status: {$activeStatuses.join(', ')}
+      </p>
+    {:else}
+      <!-- Clean up for different screensizes -->
+      <p class="text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:hidden">
+        {$filteredInvoices.length} invoices
+      </p>
+      <p
+        class="hidden text-body-1 font-medium tracking-normal text-coolGrey dark:text-lavender md:block"
+      >
+        There are {$filteredInvoices.length} invoices in total
       </p>
     {/if}
     <!-- TODO END -->
   </div>
-  <div class="flex items-center gap-3 text-body-1 font-bold tracking-normal">
-    <p>Filter <span class="hidden md:inline"> by status</span></p>
-    <ArrowDown />
-  </div>
+  <FilterStatus />
   <button
     on:click={() => (isSidePanelShowing = true)}
     class="flex items-center rounded-full bg-violet p-2 pr-4 text-body-1 font-bold tracking-normal text-white"
