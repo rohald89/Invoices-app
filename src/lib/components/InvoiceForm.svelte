@@ -8,9 +8,20 @@
   import Delete from './icons/Delete.svelte';
   import { enhance } from '$app/forms';
   import DatePicker from './DatePicker.svelte';
+  import InputField from './InputField.svelte';
 
   const dispatch = createEventDispatcher();
 
+  //   const onSubmit = (e) => {
+  //     const formData = new FormData(e.target);
+
+  //     const data = {};
+  //     for (const field of formData) {
+  //       const [key, value] = field;
+  //       data[key] = value;
+  //     }
+  //     console.log(data);
+  //   };
   export let invoice: Invoice = {
     id: '',
     createdAt: formatDateForInput(new Date()),
@@ -149,7 +160,8 @@
       <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
         >Bill From</legend
       >
-      <div class="inputField inputField__sender-street">
+      <InputField label="Street Address" bind:value={invoice.senderAddress.street} />
+      <!-- <div class="inputField inputField__sender-street">
         <label for="sender-street">Street Address</label>
         <input
           type="text"
@@ -157,7 +169,7 @@
           id="sender-street"
           bind:value={invoice.senderAddress.street}
         />
-      </div>
+      </div> -->
       <div class="inputField inputField__sender-city">
         <label for="sender-city">City</label>
         <input
@@ -341,9 +353,6 @@
     @apply box-border block w-full cursor-pointer rounded-[4px] border-1 border-lavender py-4 pl-5 text-body-1 font-bold tracking-normal text-black caret-violet accent-violet focus:outline-none focus:ring-1 focus:ring-violet dark:border-darkBlue dark:bg-veryDarkBlue dark:text-white;
   }
 
-  .inputField__sender-street {
-    grid-area: sender-street;
-  }
   .inputField__sender-city {
     grid-area: sender-city;
   }

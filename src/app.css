@@ -38,6 +38,10 @@ body {
     @apply bg-veryDarkGrayishBlue bg-opacity-[6%] text-veryDarkGrayishBlue dark:bg-lavender dark:bg-opacity-[6%] dark:text-lavender;
   }
 
+  .inputField__sender-street {
+    grid-area: sender-street;
+  }
+
   /* Button Styles */
   .primary {
     @apply bg-violet hover:bg-violet-light;
