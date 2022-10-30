@@ -4,7 +4,7 @@
 </script>
 
 <aside
-  class="z-sidebar flex bg-veryDarkGrayishBlue dark:bg-veryDarkBlue lg:fixed lg:top-0 lg:bottom-0 lg:max-h-screen lg:flex-col lg:rounded-r-[20px]"
+  class="sticky top-0 z-sidebar flex bg-veryDarkGrayishBlue dark:bg-veryDarkBlue lg:bottom-0 lg:max-h-screen lg:flex-col lg:rounded-r-[20px]"
 >
   <Logo />
   <ThemeToggle />

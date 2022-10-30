@@ -133,7 +133,7 @@
 </script>
 
 <form
-  class="relative px-6 md:px-14 lg:pl-40"
+  class="grid overflow-scroll "
   method="POST"
   action="?/create"
   use:enhance={({ form }) => {
@@ -144,203 +144,206 @@
     };
   }}
 >
-  <fieldset class="sender grid gap-6">
-    <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
-      >Bill From</legend
-    >
-    <div class="inputField inputField__sender-street">
-      <label for="sender-street">Street Address</label>
-      <input
-        on:change={(e) => (invoice.senderAddress.street = e.target.value)}
-        type="text"
-        name="sender-street"
-        id="sender-street"
-        value={invoice.senderAddress.street}
-      />
-    </div>
-    <div class="inputField inputField__sender-city">
-      <label for="sender-city">City</label>
-      <input
-        value={invoice.senderAddress.city}
-        on:change={(e) => (invoice.senderAddress.city = e.target.value)}
-        type="text"
-        name="sender-city"
-        id="sender-city"
-      />
-    </div>
-    <div class="inputField inputField__sender-postcode">
-      <label for="sender-postcode">Post Code</label>
-      <input
-        value={invoice.senderAddress.postCode}
-        on:change={(e) => (invoice.senderAddress.postCode = e.target.value)}
-        type="text"
-        name="sender-postcode"
-        id="sender-postcode"
-      />
-    </div>
-    <div class="inputField inputField__sender-country">
-      <label
-        value={invoice.senderAddress.country}
-        on:change={(e) => (invoice.senderAddress.country = e.target.value)}
-        for="sender-country">Country</label
+  <div class="overflow-scroll px-6 md:px-14 lg:pl-40">
+    <fieldset class="sender grid gap-6">
+      <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
+        >Bill From</legend
       >
-      <input type="text" name="sender-country" id="sender-country" />
-    </div>
-  </fieldset>
-  <fieldset class="receiver mt-12 grid gap-6">
-    <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
-      >Bill From</legend
-    >
-    <div class="inputField inputField__name">
-      <label for="name">Client's Name</label>
-      <input
-        value={invoice.clientName}
-        on:change={(e) => (invoice.clientName = e.target.value)}
-        type="text"
-        name="name"
-        id="name"
-      />
-    </div>
-    <div class="inputField inputField__email">
-      <label for="email">Client's Email</label>
-      <input
-        value={invoice.clientEmail}
-        on:change={(e) => (invoice.clientEmail = e.target.value)}
-        type="text"
-        name="email"
-        id="email"
-      />
-    </div>
-    <div class="inputField inputField__street">
-      <label for="street">Street Address</label>
-      <input
-        value={invoice.clientAddress.street}
-        on:change={(e) => (invoice.clientAddress.street = e.target.value)}
-        type="text"
-        name="street"
-        id="street"
-      />
-    </div>
-    <div class="inputField inputField__city">
-      <label for="city">City</label>
-      <input
-        value={invoice.clientAddress.city}
-        on:change={(e) => (invoice.clientAddress.city = e.target.value)}
-        type="text"
-        name="city"
-        id="city"
-      />
-    </div>
-    <div class="inputField inputField__postcode">
-      <label for="postcode">Post Code</label>
-      <input
-        value={invoice.clientAddress.postCode}
-        on:change={(e) => (invoice.clientAddress.postCode = e.target.value)}
-        type="text"
-        name="postcode"
-        id="postcode"
-      />
-    </div>
-    <div class="inputField inputField__country">
-      <label for="country">Country</label>
-      <input
-        value={invoice.clientAddress.country}
-        on:change={(e) => (invoice.clientAddress.country = e.target.value)}
-        type="text"
-        name="country"
-        id="country"
-      />
-    </div>
-  </fieldset>
-  <fieldset class="payment mt-12 grid gap-6">
-    <div class="inputField inputField__date">
-      <!-- TODO create custom date component for improved styling -->
-      <label for="date">Invoice Date</label>
-      <input
-        value={invoice.createdAt}
-        on:change={(e) => (invoice.createdAt = e.target.value)}
-        type="date"
-        name="date"
-        id="date"
-      />
-    </div>
-    <div class="inputField inputField__terms">
-      <!-- TODO create custom select for improved styling -->
-      <label for="terms">Payment Terms</label>
-      <!-- <input type="text" name="terms" id="terms" /> -->
-      <select name="terms" id="terms" on:change={(e) => (invoice.paymentTerms = e.target.value)}>
-        <option value="1" selected={invoice.paymentTerms === 1}>Net 1 Day</option>
-        <option value="7" selected={invoice.paymentTerms === 7}>Net 7 Days</option>
-        <option value="14" selected={invoice.paymentTerms === 14}>Net 14 Days</option>
-        <option value="30" selected={invoice.paymentTerms === 30}>Net 30 Days</option>
-      </select>
-    </div>
-    <div class="inputField inputField__description">
-      <label for="desc">Project Description</label>
-      <input
-        value={invoice.description}
-        on:change={(e) => (invoice.description = e.target.value)}
-        type="text"
-        name="desc"
-        id="desc"
-      />
-    </div>
-  </fieldset>
-  <fieldset class="itemList mt-12 pb-28 text-black dark:text-white">
-    <legend>Item List</legend>
-    <div class="itemList__grid hidden grid-cols-5 gap-4 md:grid">
-      <div class="itemList__header__name">Item Name</div>
-      <div class="itemList__header__quantity">Qty.</div>
-      <div class="itemList__header__price">Price</div>
-      <div class="itemList__header__total">Total</div>
-      <div />
-    </div>
-    {#each invoice.items as lineItem}
-      <div class="itemList__grid itemList__grid-item mt-12 grid grid-cols-5 gap-4 md:mt-4">
-        <div class="itemList__item__name inputField">
-          <label for={`item-name-${lineItem.id}`} class="md:hidden">Item Name</label>
-          <input
-            type="text"
-            name={`item-name-${lineItem.id}`}
-            value={lineItem.name}
-            on:input={(e) => updateLineItem(lineItem.id, 'name', e.target.value)}
-          />
-        </div>
-        <div class="itemList__item__quantity inputField">
-          <label for={`item-quantity-${lineItem.id}`} class="md:hidden">Qty.</label>
-          <input
-            type="text"
-            name={`item-quantity-${lineItem.id}`}
-            value={lineItem.quantity}
-            on:input={(e) => updateLineItem(lineItem.id, 'quantity', e.target.value)}
-          />
-        </div>
-        <div class="itemList__item__price inputField">
-          <label for={`item-price-${lineItem.id}`} class="md:hidden">Price</label>
-          <input
-            type="text"
-            name={`item-price-${lineItem.id}`}
-            value={lineItem.price}
-            on:input={(e) => updateLineItem(lineItem.id, 'price', e.target.value)}
-          />
-        </div>
-        <div class="itemList__item__total inputField">
-          <label for={`item-total-${lineItem.id}`} class="md:hidden">Total</label>
-          <input disabled value={((lineItem.quantity * lineItem.price) / 100).toFixed(2)} />
-        </div>
-        <button
-          type="button"
-          on:click={() => deleteLineItem(lineItem.id)}
-          class="itemList__item__delete text-coolGrey transition hover:text-red"
-        >
-          <Delete />
-        </button>
+      <div class="inputField inputField__sender-street">
+        <label for="sender-street">Street Address</label>
+        <input
+          on:change={(e) => (invoice.senderAddress.street = e.target.value)}
+          type="text"
+          name="sender-street"
+          id="sender-street"
+          value={invoice.senderAddress.street}
+        />
       </div>
-    {/each}
-    <Button label="+ Add New Item" style="stealth" classes="w-full mt-4" onClick={addLineItem} />
-  </fieldset>
+      <div class="inputField inputField__sender-city">
+        <label for="sender-city">City</label>
+        <input
+          value={invoice.senderAddress.city}
+          on:change={(e) => (invoice.senderAddress.city = e.target.value)}
+          type="text"
+          name="sender-city"
+          id="sender-city"
+        />
+      </div>
+      <div class="inputField inputField__sender-postcode">
+        <label for="sender-postcode">Post Code</label>
+        <input
+          value={invoice.senderAddress.postCode}
+          on:change={(e) => (invoice.senderAddress.postCode = e.target.value)}
+          type="text"
+          name="sender-postcode"
+          id="sender-postcode"
+        />
+      </div>
+      <div class="inputField inputField__sender-country">
+        <label
+          value={invoice.senderAddress.country}
+          on:change={(e) => (invoice.senderAddress.country = e.target.value)}
+          for="sender-country">Country</label
+        >
+        <input type="text" name="sender-country" id="sender-country" />
+      </div>
+    </fieldset>
+    <fieldset class="receiver mt-12 grid gap-6">
+      <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
+        >Bill From</legend
+      >
+      <div class="inputField inputField__name">
+        <label for="name">Client's Name</label>
+        <input
+          value={invoice.clientName}
+          on:change={(e) => (invoice.clientName = e.target.value)}
+          type="text"
+          name="name"
+          id="name"
+        />
+      </div>
+      <div class="inputField inputField__email">
+        <label for="email">Client's Email</label>
+        <input
+          value={invoice.clientEmail}
+          on:change={(e) => (invoice.clientEmail = e.target.value)}
+          type="text"
+          name="email"
+          id="email"
+        />
+      </div>
+      <div class="inputField inputField__street">
+        <label for="street">Street Address</label>
+        <input
+          value={invoice.clientAddress.street}
+          on:change={(e) => (invoice.clientAddress.street = e.target.value)}
+          type="text"
+          name="street"
+          id="street"
+        />
+      </div>
+      <div class="inputField inputField__city">
+        <label for="city">City</label>
+        <input
+          value={invoice.clientAddress.city}
+          on:change={(e) => (invoice.clientAddress.city = e.target.value)}
+          type="text"
+          name="city"
+          id="city"
+        />
+      </div>
+      <div class="inputField inputField__postcode">
+        <label for="postcode">Post Code</label>
+        <input
+          value={invoice.clientAddress.postCode}
+          on:change={(e) => (invoice.clientAddress.postCode = e.target.value)}
+          type="text"
+          name="postcode"
+          id="postcode"
+        />
+      </div>
+      <div class="inputField inputField__country">
+        <label for="country">Country</label>
+        <input
+          value={invoice.clientAddress.country}
+          on:change={(e) => (invoice.clientAddress.country = e.target.value)}
+          type="text"
+          name="country"
+          id="country"
+        />
+      </div>
+    </fieldset>
+    <fieldset class="payment mt-12 grid gap-6">
+      <div class="inputField inputField__date">
+        <!-- TODO create custom date component for improved styling -->
+        <label for="date">Invoice Date</label>
+        <input
+          value={invoice.createdAt}
+          on:change={(e) => (invoice.createdAt = e.target.value)}
+          type="date"
+          name="date"
+          id="date"
+        />
+      </div>
+      <div class="inputField inputField__terms">
+        <!-- TODO create custom select for improved styling -->
+        <label for="terms">Payment Terms</label>
+        <!-- <input type="text" name="terms" id="terms" /> -->
+        <select name="terms" id="terms" on:change={(e) => (invoice.paymentTerms = e.target.value)}>
+          <option value="1" selected={invoice.paymentTerms === 1}>Net 1 Day</option>
+          <option value="7" selected={invoice.paymentTerms === 7}>Net 7 Days</option>
+          <option value="14" selected={invoice.paymentTerms === 14}>Net 14 Days</option>
+          <option value="30" selected={invoice.paymentTerms === 30}>Net 30 Days</option>
+        </select>
+      </div>
+      <div class="inputField inputField__description">
+        <label for="desc">Project Description</label>
+        <input
+          value={invoice.description}
+          on:change={(e) => (invoice.description = e.target.value)}
+          type="text"
+          name="desc"
+          id="desc"
+        />
+      </div>
+    </fieldset>
+    <fieldset class="itemList mt-12 pb-6 text-black dark:text-white">
+      <legend>Item List</legend>
+      <div class="itemList__grid hidden grid-cols-5 gap-4 md:grid">
+        <div class="itemList__header__name">Item Name</div>
+        <div class="itemList__header__quantity">Qty.</div>
+        <div class="itemList__header__price">Price</div>
+        <div class="itemList__header__total">Total</div>
+        <div />
+      </div>
+      {#each invoice.items as lineItem}
+        <div class="itemList__grid itemList__grid-item mt-12 grid grid-cols-5 gap-4 md:mt-4">
+          <div class="itemList__item__name inputField">
+            <label for={`item-name-${lineItem.id}`} class="md:hidden">Item Name</label>
+            <input
+              type="text"
+              name={`item-name-${lineItem.id}`}
+              value={lineItem.name}
+              on:input={(e) => updateLineItem(lineItem.id, 'name', e.target.value)}
+            />
+          </div>
+          <div class="itemList__item__quantity inputField">
+            <label for={`item-quantity-${lineItem.id}`} class="md:hidden">Qty.</label>
+            <input
+              type="text"
+              name={`item-quantity-${lineItem.id}`}
+              value={lineItem.quantity}
+              on:input={(e) => updateLineItem(lineItem.id, 'quantity', e.target.value)}
+            />
+          </div>
+          <div class="itemList__item__price inputField">
+            <label for={`item-price-${lineItem.id}`} class="md:hidden">Price</label>
+            <input
+              type="text"
+              name={`item-price-${lineItem.id}`}
+              value={lineItem.price}
+              on:input={(e) => updateLineItem(lineItem.id, 'price', e.target.value)}
+            />
+          </div>
+          <div class="itemList__item__total inputField">
+            <label for={`item-total-${lineItem.id}`} class="md:hidden">Total</label>
+            <input disabled value={((lineItem.quantity * lineItem.price) / 100).toFixed(2)} />
+          </div>
+          <button
+            type="button"
+            on:click={() => deleteLineItem(lineItem.id)}
+            class="itemList__item__delete text-coolGrey transition hover:text-red"
+          >
+            <Delete />
+          </button>
+        </div>
+      {/each}
+      <Button label="+ Add New Item" style="stealth" classes="w-full mt-4" onClick={addLineItem} />
+    </fieldset>
+    <!-- TODO -->
+  </div>
   <div
-    class="absolute bottom-0 left-0 right-0 flex gap-2 p-5 dark:bg-veryDarkBlue md:px-14 dark:md:bg-transparent lg:pl-40 "
+    class="flex gap-2 py-5 px-6 dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 dark:md:bg-transparent lg:pl-40"
   >
     {#if invoice.id === ''}
       <Button

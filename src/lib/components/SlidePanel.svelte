@@ -25,8 +25,8 @@
   <div
     transition:fly={{ x: -500, duration: 300 }}
     class="
-
-    fixed top-0 left-0 z-slidePanel h-screen w-full overflow-y-scroll bg-white dark:bg-earie-black md:w-3/4 md:rounded-r-[20px] xl:w-1/2"
+    fixed top-0
+    left-0 z-slidePanel flex h-screen w-full flex-col bg-white dark:bg-earie-black md:w-3/4 md:rounded-r-[20px] xl:w-1/2"
   >
     <slot />
   </div>
