@@ -31,14 +31,12 @@ export const filterInvoices = () => {
 };
 
 export const getInvoice = (id: string) => {
-  return get(invoices).find((inv) => inv.id === id);
+  return get(filteredInvoices).find((inv) => inv.id === id);
 };
 
 export const addInvoice = (invoice: Invoice) => {
-  console.log(invoice);
-  invoices.update((invoices) => {
-    return [invoice, ...invoices];
-  });
+  invoices.update((invoices) => [invoice, ...invoices]);
+  filterInvoices();
 };
 
 export const updateInvoice = (invoice: Invoice) => {
@@ -54,6 +52,7 @@ export const deleteInvoice = (id: string) => {
   const currentInvoices = get(invoices);
   const updatedInvoices = currentInvoices.filter((inv) => inv.id !== id);
   invoices.set(updatedInvoices);
+  filterInvoices();
   goto('/');
 };
 

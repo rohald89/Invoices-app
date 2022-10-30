@@ -343,14 +343,14 @@
     <!-- TODO -->
   </div>
   <div
-    class="flex gap-2 py-5 px-6 dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 dark:md:bg-transparent lg:pl-40"
+    class="flex gap-2 py-5 px-6 dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 lg:pl-40 dark:lg:bg-transparent"
   >
     {#if invoice.id === ''}
       <Button
         onClick={() => dispatch('closePanel')}
         style="secondary"
         label="Discard"
-        classes="mr-auto"
+        classes="md:mr-auto"
       />
       <Button onClick={saveDraft} style="secondary" label="Save as Draft" />
       <Button onClick={sendInvoice} label="Save & Send" />
