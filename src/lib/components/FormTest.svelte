@@ -4,10 +4,30 @@
   import Form from './Form.svelte';
   import Input from './Input.svelte';
   import Button from './Button.svelte';
+  import LineItems from './LineItems.svelte';
+  import DatePicker from './DatePicker.svelte';
+  import Select from './Select.svelte';
+  import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
+  import { generateId } from '$lib/utils/invoiceHelpers';
+  import { addInvoice } from '$lib/stores/InvoiceStore';
 
   const dispatch = createEventDispatcher();
 
   let formEl;
+
+  let items = [
+    {
+      id: '1',
+      name: '',
+      quantity: 1,
+      price: 1000,
+      total: 1000
+    }
+  ];
+
+  const updateItems = (updatedItems: LineItem[]) => {
+    items = updatedItems;
+  };
 
   let form = {
     'sender-street': {
@@ -42,10 +62,27 @@
     }
   };
 
+  let selectedDate = new Date();
+
   const onSubmit = (e) => {
     if (e?.detail?.valid) {
-      console.log(e.detail.data);
-      setTimeout(() => formEl.reset(), 1000);
+      const { invoice } = e.detail;
+      invoice.id = generateId();
+      invoice.createdAt = formatDateForInput(selectedDate);
+      invoice.paymentTerms = +invoice.paymentTerms;
+      invoice.paymentDue = calculateDueDate(invoice.createdAt, invoice.paymentTerms);
+      invoice.items = items.map((item) => {
+        return {
+          ...item,
+          quantity: +item.quantity,
+          price: +item.price,
+          total: +item.quantity * +item.price
+        };
+      });
+      invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
+      console.log('data', invoice);
+      addInvoice(invoice);
+      dispatch('closePanel');
     } else {
       console.log('invalid form');
     }
@@ -67,18 +104,13 @@
         message="Can't be empty"
         grid="col-span-2 md:col-span-3"
       />
-      <Input label="City" name="sender-city" validation="required" message="Can't be empty" />
-      <Input
-        label="Post Code"
-        name="sender-postcode"
-        validation="required"
-        message="Can't be empty"
-      />
+      <Input label="City" name="sender-city" validation="required" message="Required" />
+      <Input label="Post Code" name="sender-postcode" validation="required" message="Required" />
       <Input
         label="Country"
         name="sender-country"
         validation="required"
-        message="Can't be empty"
+        message="Required"
         grid="col-span-2 md:col-span-1"
       />
     </fieldset>
@@ -107,21 +139,39 @@
         message="Can't be empty"
         grid="col-span-2 md:col-span-3"
       />
-      <Input label="City" name="client-city" validation="required" message="Can't be empty" />
-      <Input
-        label="Post Code"
-        name="client-postcode"
-        validation="required"
-        message="Can't be empty"
-      />
+      <Input label="City" name="client-city" validation="required" message="Required" />
+      <Input label="Post Code" name="client-postcode" validation="required" message="Required" />
       <Input
         label="Country"
         name="client-country"
         validation="required"
-        message="Can't be empty"
+        message="Required"
         grid="col-span-2 md:col-span-1"
       />
     </fieldset>
+
+    <fieldset class="payment mt-12 grid gap-6">
+      <DatePicker
+        classes="col-span-1"
+        onDateChange={(date) => (selectedDate = formatDateForInput(date))}
+        {selectedDate}
+      />
+      <Select label="Payment Terms" name="payment-terms">
+        <option value="1">Net 1 Day</option>
+        <option value="7">Net 7 Days</option>
+        <option value="14">Net 14 Days</option>
+        <option value="30">Net 30 Days</option>
+      </Select>
+      <Input
+        label="Project Description"
+        name="description"
+        validation="required"
+        message="Required"
+        grid="md:col-span-2"
+      />
+    </fieldset>
+
+    <LineItems {items} {updateItems} />
   </div>
 
   <div
@@ -143,5 +193,8 @@
   .sender,
   .receiver {
     @apply grid-cols-2 md:grid-cols-3;
+  }
+  .payment {
+    @apply grid-cols-1 md:grid-cols-2;
   }
 </style>

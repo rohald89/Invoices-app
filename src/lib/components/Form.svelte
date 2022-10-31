@@ -1,4 +1,5 @@
 <script lang="ts">
+  // https://www.thisdot.co/blog/handling-forms-in-svelte
   import { setContext } from 'svelte';
   import type { ValidatorFN, ValidatorResult } from '$lib/utils/Validators';
   import { createEventDispatcher } from 'svelte';
@@ -19,11 +20,11 @@
     validateField(e.target.name, e.target.value);
   };
 
-  const isFormValid = (): boolean => {
-    return !Object.values(errors).some((field) =>
+  function isFormValid(): boolean {
+    return !Object.values($errors).some((field) =>
       Object.values(field).some((errorObject: ValidatorResult) => errorObject.error)
     );
-  };
+  }
 
   const validateField = (field, value) => {
     form[field]?.validators &&
@@ -50,7 +51,33 @@
 
     validateForm(data);
 
-    return dispatch('submit', { valid: isFormValid(), data });
+    const invoice: Invoice = {
+      id: data.id,
+      status: 'draft',
+      senderAddress: {
+        street: data['sender-street'],
+        city: data['sender-city'],
+        postCode: data['sender-postcode'],
+        country: data['sender-country']
+      },
+      clientName: data['client-name'],
+      clientEmail: data['client-email'],
+      clientAddress: {
+        street: data['client-street'],
+        city: data['client-city'],
+        postCode: data['client-postcode'],
+        country: data['client-country']
+      },
+      createdAt: data['created-at'],
+      paymentDue: data['payment-due'],
+      description: data['description'],
+      paymentTerms: data['payment-terms'],
+      items: data['line-items'],
+      total: data['total']
+    };
+    console.log(invoice);
+
+    return dispatch('submit', { valid: isFormValid(), invoice });
   };
 
   export const reset = () => {

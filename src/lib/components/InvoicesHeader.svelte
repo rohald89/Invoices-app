@@ -75,6 +75,6 @@
       New Invoice
     </h1>
     <!-- <InvoiceForm on:closePanel={() => (isSidePanelShowing = false)} /> -->
-    <FormTest />
+    <FormTest on:closePanel={() => (isSidePanelShowing = false)} />
   </SlidePanel>
 {/if}

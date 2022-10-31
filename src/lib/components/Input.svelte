@@ -11,8 +11,8 @@
   const { onBlur } = getContext('form');
 </script>
 
-<div class={`inputField ${grid}`}>
-  <div class="flex justify-between">
+<div class={`flex flex-col gap-y-2 ${grid}`}>
+  <div class="flex flex-wrap justify-between">
     <label
       class="text-body-1 font-medium tracking-normal text-grayishBlue dark:text-coolGrey"
       for={name}>{label}</label
@@ -28,9 +28,3 @@
     on:blur={onBlur}
   />
 </div>
-
-<style lang="postcss">
-  .inputField {
-    @apply flex flex-col gap-y-2;
-  }
-</style>

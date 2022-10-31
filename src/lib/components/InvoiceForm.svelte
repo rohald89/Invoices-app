@@ -160,8 +160,8 @@
       <legend class="col-span-2 mb-6 text-body-1 font-bold tracking-normal text-violet"
         >Bill From</legend
       >
-      <InputField label="Street Address" bind:value={invoice.senderAddress.street} />
-      <!-- <div class="inputField inputField__sender-street">
+      <!-- <InputField label="Street Address" bind:value={invoice.senderAddress.street} /> -->
+      <div class="inputField inputField__sender-street">
         <label for="sender-street">Street Address</label>
         <input
           type="text"
@@ -169,7 +169,7 @@
           id="sender-street"
           bind:value={invoice.senderAddress.street}
         />
-      </div> -->
+      </div>
       <div class="inputField inputField__sender-city">
         <label for="sender-city">City</label>
         <input
