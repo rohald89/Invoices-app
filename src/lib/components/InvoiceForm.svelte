@@ -8,20 +8,9 @@
   import Delete from './icons/Delete.svelte';
   import { enhance } from '$app/forms';
   import DatePicker from './DatePicker.svelte';
-  import InputField from './InputField.svelte';
 
   const dispatch = createEventDispatcher();
 
-  //   const onSubmit = (e) => {
-  //     const formData = new FormData(e.target);
-
-  //     const data = {};
-  //     for (const field of formData) {
-  //       const [key, value] = field;
-  //       data[key] = value;
-  //     }
-  //     console.log(data);
-  //   };
   export let invoice: Invoice = {
     id: '',
     createdAt: formatDateForInput(new Date()),

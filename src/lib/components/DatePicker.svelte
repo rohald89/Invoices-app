@@ -7,7 +7,6 @@
   export let selectedDate: Date = new Date();
   export let onDateChange: (date: Date) => void = () => {};
 
-  const today = new Date();
   let isOpen = false;
   // abreviated month names
   const months = [
@@ -24,9 +23,9 @@
     'Nov',
     'Dec'
   ];
-  let selectedDay = today.getDate();
-  let selectedMonth = months[today.getMonth()];
-  let selectedYear = today.getFullYear();
+  let selectedDay = selectedDate.getDate();
+  let selectedMonth = months[selectedDate.getMonth()];
+  let selectedYear = selectedDate.getFullYear();
 
   const changeNextMonth = () => {
     const nextMonth = selectedDate.getMonth() + 1;
@@ -92,8 +91,6 @@
 
     return days;
   };
-
-  const days = getDays(selectedDate.getMonth(), selectedDate.getFullYear());
 
   const handleDayClick = (day: number) => {
     selectedDate = new Date(selectedDate.setDate(day));

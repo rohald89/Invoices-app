@@ -9,13 +9,16 @@
   import Select from './Select.svelte';
   import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
   import { generateId } from '$lib/utils/invoiceHelpers';
-  import { addInvoice } from '$lib/stores/InvoiceStore';
+  import { addInvoice, updateInvoice } from '$lib/stores/InvoiceStore';
 
   const dispatch = createEventDispatcher();
 
   let formEl;
+  export let invoice: Invoice | null = null;
 
-  let items = [
+  let selectedDate = invoice ? new Date(invoice?.createdAt) : new Date();
+  console.log(selectedDate);
+  let items = invoice?.items || [
     {
       id: '1',
       name: '',
@@ -59,15 +62,17 @@
     },
     'client-country': {
       validators: [Validators.required]
+    },
+    description: {
+      validators: [Validators.required]
     }
   };
 
-  let selectedDate = new Date();
+  console.log(invoice?.id);
 
   const onSubmit = (e) => {
     if (e?.detail?.valid) {
       const { invoice } = e.detail;
-      invoice.id = generateId();
       invoice.createdAt = formatDateForInput(selectedDate);
       invoice.paymentTerms = +invoice.paymentTerms;
       invoice.paymentDue = calculateDueDate(invoice.createdAt, invoice.paymentTerms);
@@ -81,7 +86,15 @@
       });
       invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
       console.log('data', invoice);
-      addInvoice(invoice);
+      console.log(invoice);
+      if (invoice.id !== undefined) {
+        console.log('updating');
+        updateInvoice(invoice);
+      } else {
+        console.log('adding');
+        invoice.id = generateId();
+        addInvoice(invoice);
+      }
       dispatch('closePanel');
     } else {
       console.log('invalid form');
@@ -102,15 +115,29 @@
         name="sender-street"
         validation="required"
         message="Can't be empty"
+        value={invoice?.senderAddress.street}
         grid="col-span-2 md:col-span-3"
       />
-      <Input label="City" name="sender-city" validation="required" message="Required" />
-      <Input label="Post Code" name="sender-postcode" validation="required" message="Required" />
+      <Input
+        label="City"
+        name="sender-city"
+        validation="required"
+        message="Required"
+        value={invoice?.senderAddress.city}
+      />
+      <Input
+        label="Post Code"
+        name="sender-postcode"
+        validation="required"
+        message="Required"
+        value={invoice?.senderAddress.postCode}
+      />
       <Input
         label="Country"
         name="sender-country"
         validation="required"
         message="Required"
+        value={invoice?.senderAddress.country}
         grid="col-span-2 md:col-span-1"
       />
     </fieldset>
@@ -123,6 +150,7 @@
         name="client-name"
         validation="required"
         message="Can't be empty"
+        value={invoice?.clientName}
         grid="grid-span-2 md:col-span-3"
       />
       <Input
@@ -130,6 +158,7 @@
         name="client-email"
         validation="required"
         message="Can't be empty"
+        value={invoice?.clientEmail}
         grid="grid-span-2 md:col-span-3"
       />
       <Input
@@ -137,15 +166,29 @@
         name="client-street"
         validation="required"
         message="Can't be empty"
+        value={invoice?.clientAddress.street}
         grid="col-span-2 md:col-span-3"
       />
-      <Input label="City" name="client-city" validation="required" message="Required" />
-      <Input label="Post Code" name="client-postcode" validation="required" message="Required" />
+      <Input
+        label="City"
+        name="client-city"
+        validation="required"
+        message="Required"
+        value={invoice?.clientAddress.city}
+      />
+      <Input
+        label="Post Code"
+        name="client-postcode"
+        validation="required"
+        message="Required"
+        value={invoice?.clientAddress.postCode}
+      />
       <Input
         label="Country"
         name="client-country"
         validation="required"
         message="Required"
+        value={invoice?.clientAddress.country}
         grid="col-span-2 md:col-span-1"
       />
     </fieldset>
@@ -153,20 +196,21 @@
     <fieldset class="payment mt-12 grid gap-6">
       <DatePicker
         classes="col-span-1"
-        onDateChange={(date) => (selectedDate = formatDateForInput(date))}
+        onDateChange={(date) => (selectedDate = date)}
         {selectedDate}
       />
       <Select label="Payment Terms" name="payment-terms">
-        <option value="1">Net 1 Day</option>
-        <option value="7">Net 7 Days</option>
-        <option value="14">Net 14 Days</option>
-        <option value="30">Net 30 Days</option>
+        <option value="1" selected={invoice?.paymentTerms === 1}>Net 1 Day</option>
+        <option value="7" selected={invoice?.paymentTerms === 7}>Net 7 Days</option>
+        <option value="14" selected={invoice?.paymentTerms === 14}>Net 14 Days</option>
+        <option value="30" selected={invoice?.paymentTerms === 30}>Net 30 Days</option>
       </Select>
       <Input
         label="Project Description"
         name="description"
         validation="required"
         message="Required"
+        value={invoice?.description}
         grid="md:col-span-2"
       />
     </fieldset>
@@ -177,15 +221,31 @@
   <div
     class="flex justify-center gap-2 py-5 px-6 shadow-buttons dark:bg-veryDarkBlue md:rounded-r-[20px] md:px-14 lg:pl-40 dark:lg:bg-transparent"
   >
-    <Button
-      onClick={() => dispatch('closePanel')}
-      style="secondary"
-      label="Discard"
-      classes="md:mr-auto"
-    />
-    <Button onClick={() => {}} style="tertiary" label="Save as Draft" />
-    <Button onClick={() => {}} label="Save & Send" />
-    <button>submit</button>
+    {#if invoice?.id === undefined}
+      <Button
+        onClick={() => dispatch('closePanel')}
+        style="secondary"
+        label="Discard"
+        classes="md:mr-auto"
+      />
+      <Button
+        onClick={() => dispatch('submit')}
+        type="submit"
+        style="tertiary"
+        label="Save as Draft"
+      />
+      <Button onClick={() => {}} label="Save & Send" />
+
+      <button>submit</button>
+    {:else}
+      <Button
+        onClick={() => dispatch('closePanel')}
+        style="secondary"
+        label="Cancel"
+        classes="ml-auto"
+      />
+      <Button type="submit" onClick={() => {}} label="Save Changes" />
+    {/if}
   </div></Form
 >
 

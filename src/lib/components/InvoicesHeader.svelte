@@ -1,12 +1,13 @@
 <script lang="ts">
   import { activeStatuses, filteredInvoices } from '$lib/stores/InvoiceStore';
-  import Plus from './icons/Plus.svelte';
   import SlidePanel from '$lib/components/SlidePanel.svelte';
+  import InvoiceForm from '$lib/components/InvoiceForm.svelte';
+  import FilterStatus from '$lib/components/FilterStatus.svelte';
+
+  import Plus from './icons/Plus.svelte';
   import ArrowLeft from './icons/ArrowLeft.svelte';
-  import InvoiceForm from './InvoiceForm.svelte';
-  import FilterStatus from './FilterStatus.svelte';
-  import Form from './FormTest.svelte';
   import FormTest from './FormTest.svelte';
+
   let isSidePanelShowing: boolean = false;
 </script>
 
@@ -57,7 +58,6 @@
 {#if isSidePanelShowing}
   <SlidePanel
     on:closePanel={() => {
-      console.log('close panel');
       isSidePanelShowing = false;
     }}
   >
