@@ -68,6 +68,7 @@
   };
 
   const onSubmit = (e) => {
+    console.log(e.detail);
     if (e?.detail?.valid) {
       const { invoiceData } = e.detail;
       invoiceData.createdAt = formatDateForInput(selectedDate);
@@ -227,13 +228,12 @@
       />
       <Button
         onClick={() => dispatch('submit')}
+        formaction="?/submitAsDraft"
         type="submit"
         style="tertiary"
         label="Save as Draft"
       />
-      <Button onClick={() => {}} label="Save & Send" />
-
-      <button>submit</button>
+      <Button formaction="?/submitAndSend" type="submit" onClick={() => {}} label="Save & Send" />
     {:else}
       <Button
         onClick={() => dispatch('closePanel')}

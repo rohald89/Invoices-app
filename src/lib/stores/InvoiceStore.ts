@@ -37,16 +37,14 @@ export const getInvoice = (id: string) => {
 
 export const addInvoice = (invoice: Invoice) => {
   invoices.update((invoices) => [invoice, ...invoices]);
-  filterInvoices();
+  filteredInvoices.update((invoices) => [invoice, ...invoices]);
 };
 
 export const updateInvoice = (invoice: Invoice) => {
   invoices.update((invoices) => {
-    console.log('updating invoice', invoice);
     const index = invoices.findIndex((inv) => inv.id === invoice.id);
-    console.log(index);
     invoices[index] = invoice;
-    console.log(invoices);
+    filterInvoices();
     return invoices;
   });
 };
@@ -74,4 +72,5 @@ export const changeStatus = (id: string, status: InvoiceStatus) => {
   });
   console.log(updatedInvoices);
   invoices.set(updatedInvoices);
+  filterInvoices();
 };

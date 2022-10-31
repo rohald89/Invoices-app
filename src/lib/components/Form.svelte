@@ -4,6 +4,7 @@
   import type { ValidatorFN, ValidatorResult } from '$lib/utils/Validators';
   import { createEventDispatcher } from 'svelte';
   import { writable } from 'svelte/store';
+  import { enhance } from '$app/forms';
 
   export let form: {
     [inputName: string]: {
@@ -86,6 +87,6 @@
   setContext('form', { errors, onBlur });
 </script>
 
-<form class="grid overflow-scroll" on:submit|preventDefault={onSubmit} bind:this={formEl}>
+<form on:submit|preventDefault={onSubmit} bind:this={formEl} class="grid overflow-scroll">
   <slot />
 </form>
