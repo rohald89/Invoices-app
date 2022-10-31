@@ -67,10 +67,13 @@
     }
   };
 
+  let invoiceStatus = invoice?.status || 'draft';
+
   const onSubmit = (e) => {
     console.log(e.detail);
     if (e?.detail?.valid) {
       const { invoiceData } = e.detail;
+      invoiceData.status = invoiceStatus;
       invoiceData.createdAt = formatDateForInput(selectedDate);
       invoiceData.paymentTerms = +invoiceData.paymentTerms;
       invoiceData.paymentDue = calculateDueDate(invoiceData.createdAt, invoiceData.paymentTerms);
@@ -86,10 +89,12 @@
       if (invoice?.id !== undefined) {
         console.log('updating', invoiceData);
         invoiceData.id = invoice.id;
-        invoiceData.status = invoice.status;
         updateInvoice(invoiceData);
         console.log($invoices);
       } else {
+        // determine which button has been clicked
+        const button = e.target;
+        console.log(button);
         console.log('adding', invoiceData);
         invoiceData.id = generateId();
         addInvoice(invoiceData);
@@ -229,12 +234,11 @@
       />
       <Button
         onClick={() => dispatch('submit')}
-        formaction="?/submitAsDraft"
         type="submit"
         style="tertiary"
         label="Save as Draft"
       />
-      <Button formaction="?/submitAndSend" type="submit" onClick={() => {}} label="Save & Send" />
+      <Button type="submit" onClick={() => (invoiceStatus = 'pending')} label="Save & Send" />
     {:else}
       <Button
         onClick={() => dispatch('closePanel')}
