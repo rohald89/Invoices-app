@@ -32,7 +32,7 @@
 </script>
 
 <fieldset class="itemList mt-12 pb-6 text-black dark:text-white">
-  <legend>Item List</legend>
+  <legend class="mb-4 text-[18px] font-bold tracking-tight text-[#777F98]">Item List</legend>
   <div class="itemList__grid hidden grid-cols-5 gap-4 md:grid">
     <div class="text-body-1 font-medium tracking-normal text-grayishBlue dark:text-coolGrey">
       Item Name
