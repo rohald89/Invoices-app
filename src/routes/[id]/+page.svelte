@@ -11,6 +11,10 @@
   $: invoice = $invoices.find((i) => i.id === data.id);
 </script>
 
+<svelte:head>
+  <title>Invoices App | {data.id}</title>
+</svelte:head>
+
 {#if invoice}
   <div>
     <a

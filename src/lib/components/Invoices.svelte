@@ -4,6 +4,11 @@
   import NothingHere from './NothingHere.svelte';
 </script>
 
+<svelte:head>
+  <title>Invoices App | Home</title>
+  <meta name="description" content="Invoices App" />
+</svelte:head>
+
 <div class="flex flex-col gap-y-4">
   {#if $filteredInvoices === null}
     <p>Loading...</p>

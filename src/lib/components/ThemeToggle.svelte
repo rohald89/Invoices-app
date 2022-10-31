@@ -28,6 +28,7 @@
 <button
   on:click={toggleTheme}
   class="mx-6 text-grayishBlue transition hover:text-lavender lg:mx-auto lg:mb-7"
+  aria-label="Toggle theme"
 >
   {#if darkMode}
     <Sun />

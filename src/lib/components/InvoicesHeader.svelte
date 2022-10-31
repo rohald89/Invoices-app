@@ -45,7 +45,7 @@
   <FilterStatus />
   <button
     on:click={() => (isSidePanelShowing = true)}
-    class="flex items-center rounded-full bg-violet p-2 pr-4 text-body-1 font-bold tracking-normal text-white transition hover:bg-violet-light"
+    class="flex items-center rounded-full bg-violet-dark p-2 pr-4 text-body-1 font-bold tracking-normal text-white transition hover:bg-violet"
   >
     <div class="center mr-4 h-8 w-8 rounded-full bg-white">
       <Plus />

@@ -25,6 +25,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        'violet-dark': '#6946f9',
         violet: '#7c5dfa',
         'violet-light': '#9277FF',
         veryDarkBlue: '#1E2139',
