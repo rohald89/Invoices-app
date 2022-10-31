@@ -86,6 +86,7 @@
       if (invoice?.id !== undefined) {
         console.log('updating', invoiceData);
         invoiceData.id = invoice.id;
+        invoiceData.status = invoice.status;
         updateInvoice(invoiceData);
         console.log($invoices);
       } else {
