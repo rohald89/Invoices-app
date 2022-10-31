@@ -6,7 +6,6 @@
 
   import Plus from './icons/Plus.svelte';
   import ArrowLeft from './icons/ArrowLeft.svelte';
-  import FormTest from './FormTest.svelte';
 
   let isSidePanelShowing: boolean = false;
 </script>
@@ -74,7 +73,6 @@
     >
       New Invoice
     </h1>
-    <!-- <InvoiceForm on:closePanel={() => (isSidePanelShowing = false)} /> -->
-    <FormTest on:closePanel={() => (isSidePanelShowing = false)} />
+    <InvoiceForm on:closePanel={() => (isSidePanelShowing = false)} />
   </SlidePanel>
 {/if}

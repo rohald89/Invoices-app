@@ -1,6 +1,5 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
-  import FormTest from '$lib/components/FormTest.svelte';
   import ArrowLeft from '$lib/components/icons/ArrowLeft.svelte';
   import InvoiceForm from '$lib/components/InvoiceForm.svelte';
   import Modal from '$lib/components/Modal.svelte';
@@ -90,7 +89,6 @@
     >
       Edit <span class="text-coolGrey">#</span>{id}
     </h1>
-    <!-- <InvoiceForm {invoice} on:closePanel={() => (isEditPanelShowing = false)} /> -->
-    <FormTest {invoice} on:closePanel={() => (isEditPanelShowing = false)} />
+    <InvoiceForm {invoice} on:closePanel={() => (isEditPanelShowing = false)} />
   </SlidePanel>
 {/if}

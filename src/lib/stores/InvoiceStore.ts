@@ -50,11 +50,8 @@ export const updateInvoice = (invoice: Invoice) => {
 };
 
 export const deleteInvoice = (id: string) => {
-  console.log(id);
-  const currentInvoices = get(invoices);
-  const updatedInvoices = currentInvoices.filter((inv) => inv.id !== id);
-  invoices.set(updatedInvoices);
-  filterInvoices();
+  invoices.update((invoices) => invoices.filter((inv) => inv.id !== id));
+  filteredInvoices.update((invoices) => invoices.filter((inv) => inv.id !== id));
   goto('/');
 };
 
