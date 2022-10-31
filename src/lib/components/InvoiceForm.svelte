@@ -1,7 +1,7 @@
 <script lang="ts">
   import { v4 as uuidv4 } from 'uuid';
   import { addInvoice, updateInvoice } from '$lib/stores/InvoiceStore';
-  import { calculateDueDate, formatDate, formatDateForInput } from '$lib/utils/dateHelpers';
+  import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
   import { generateId } from '$lib/utils/invoiceHelpers';
   import { createEventDispatcher } from 'svelte';
   import Button from './Button.svelte';

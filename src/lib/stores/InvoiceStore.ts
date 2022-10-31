@@ -7,6 +7,7 @@ export const filteredInvoices = writable<Invoice[]>([]);
 export const activeStatuses = writable<InvoiceStatus[]>([]);
 
 export const loadData = () => {
+  console.log('data being loaded');
   invoices.set(data);
   filteredInvoices.set(data);
 };
@@ -41,8 +42,11 @@ export const addInvoice = (invoice: Invoice) => {
 
 export const updateInvoice = (invoice: Invoice) => {
   invoices.update((invoices) => {
+    console.log('updating invoice', invoice);
     const index = invoices.findIndex((inv) => inv.id === invoice.id);
+    console.log(index);
     invoices[index] = invoice;
+    console.log(invoices);
     return invoices;
   });
 };

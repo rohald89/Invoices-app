@@ -9,7 +9,7 @@
   import Select from './Select.svelte';
   import { calculateDueDate, formatDateForInput } from '$lib/utils/dateHelpers';
   import { generateId } from '$lib/utils/invoiceHelpers';
-  import { addInvoice, updateInvoice } from '$lib/stores/InvoiceStore';
+  import { addInvoice, updateInvoice, invoices } from '$lib/stores/InvoiceStore';
 
   const dispatch = createEventDispatcher();
 
@@ -17,7 +17,6 @@
   export let invoice: Invoice | null = null;
 
   let selectedDate = invoice ? new Date(invoice?.createdAt) : new Date();
-  console.log(selectedDate);
   let items = invoice?.items || [
     {
       id: '1',
@@ -68,15 +67,13 @@
     }
   };
 
-  console.log(invoice?.id);
-
   const onSubmit = (e) => {
     if (e?.detail?.valid) {
-      const { invoice } = e.detail;
-      invoice.createdAt = formatDateForInput(selectedDate);
-      invoice.paymentTerms = +invoice.paymentTerms;
-      invoice.paymentDue = calculateDueDate(invoice.createdAt, invoice.paymentTerms);
-      invoice.items = items.map((item) => {
+      const { invoiceData } = e.detail;
+      invoiceData.createdAt = formatDateForInput(selectedDate);
+      invoiceData.paymentTerms = +invoiceData.paymentTerms;
+      invoiceData.paymentDue = calculateDueDate(invoiceData.createdAt, invoiceData.paymentTerms);
+      invoiceData.items = items.map((item) => {
         return {
           ...item,
           quantity: +item.quantity,
@@ -84,16 +81,16 @@
           total: +item.quantity * +item.price
         };
       });
-      invoice.total = invoice.items.reduce((acc, item) => acc + item.total, 0);
-      console.log('data', invoice);
-      console.log(invoice);
-      if (invoice.id !== undefined) {
-        console.log('updating');
-        updateInvoice(invoice);
+      invoiceData.total = invoiceData.items.reduce((acc, item) => acc + item.total, 0);
+      if (invoice?.id !== undefined) {
+        console.log('updating', invoiceData);
+        invoiceData.id = invoice.id;
+        updateInvoice(invoiceData);
+        console.log($invoices);
       } else {
-        console.log('adding');
-        invoice.id = generateId();
-        addInvoice(invoice);
+        console.log('adding', invoiceData);
+        invoiceData.id = generateId();
+        addInvoice(invoiceData);
       }
       dispatch('closePanel');
     } else {

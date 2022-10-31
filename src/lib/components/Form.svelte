@@ -51,8 +51,7 @@
 
     validateForm(data);
 
-    const invoice: Invoice = {
-      id: data.id,
+    const invoiceData = {
       status: 'draft',
       senderAddress: {
         street: data['sender-street'],
@@ -75,9 +74,9 @@
       items: data['line-items'],
       total: data['total']
     };
-    console.log(invoice);
+    console.log(invoiceData);
 
-    return dispatch('submit', { valid: isFormValid(), invoice });
+    return dispatch('submit', { valid: isFormValid(), invoiceData });
   };
 
   export const reset = () => {
