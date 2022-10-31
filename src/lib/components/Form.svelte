@@ -53,7 +53,6 @@
     validateForm(data);
 
     const invoiceData = {
-      status: 'draft',
       senderAddress: {
         street: data['sender-street'],
         city: data['sender-city'],
