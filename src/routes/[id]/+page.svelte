@@ -3,7 +3,7 @@
   import ArrowLeft from '$lib/components/icons/ArrowLeft.svelte';
   import DetailHeader from './DetailHeader.svelte';
   import InvoiceDetails from './InvoiceDetails.svelte';
-  import { goto } from '$app/navigation';
+  import NotFound from '$lib/components/NotFound.svelte';
 
   /** @type {import('/$types').PageData} */
   export let data: Invoice;
@@ -27,8 +27,5 @@
     <InvoiceDetails {invoice} />
   </div>
 {:else}
-  <div class="flex h-full flex-col items-center justify-center">
-    <ArrowLeft class="h-8 w-8 text-gray-500" on:click={() => goto('/')} />
-    <p class="mt-4 text-gray-500">Invoice not found</p>
-  </div>
+  <NotFound />
 {/if}
